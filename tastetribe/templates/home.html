@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    hoooooooooooooooo
+    <div id="sidebar" class="sidebar">
+        <a href="#">Home</a>
+        <a href="addRecipe">Add Recipe</a>
+        <a href="#">View profile</a>
+        <a href="#">Activity</a>
+        <a href="#">Logout</a>
+    </div>
 </body>
 </html>

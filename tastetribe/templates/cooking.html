@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cooking steps</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-2">
+                <div id="sidebar" class="sidebar">
+                    <a href="../home">Home</a>
+                    <a href="../addRecipe">Add Recipe</a>
+                    <a href="#">View profile</a>
+                    <a href="#">Activity</a>
+                    <a href="#">Logout</a>
+                </div>
+            </div>
+            <div class="col-10 addRec">
+                <a href="../cooking/{{dish.pk}}" class="btn btn-dark cooking">Cooking steps</a>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-container">
+                        <div class="form-group">
+                            <label for="name">Cooking steps of {{dish.name}}</label>
+                            <input type="text" name="steps" id="name" placeholder="steps">
+                        </div>
+                        <input type="submit" class="btn btn-success" value="Add">
+                    </div>
+                </form>
+                <div class="row">
+                    {% if data %}
+                    {% for i in data %}
+                    <div class="col-6">
+                        <div class="items">
+                            <h5>{{i.steps}}</h5>
+                            <div class="bb">
+                                <button class="btn btn-success edit-btn" data-id="{{ i.id }}" data-item="{{ i.item }}">Edit</button>
+
+                                <a href="" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+body{
+    background-color: rgb(255, 255, 255);
+}
+form{
+    width: 400px;
+    margin: auto;
+    margin-top: 17%;
+    padding: 50px;
+    box-shadow: 0 0 5px;
+    border-radius: 15px;
+}
+.reg{
+    margin-top: 5%;
+}
+.btn{
+    background-color: orange;
+    color: white;
+    font-weight: 700;
+    margin: auto;
+}
+.btn:hover{
+    background-color: white;
+    color: orange;
+    border-color: orange;
+}
+input{
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+}
+.alert{
+    width: 800px;
+    margin: auto;
+}
+.req li{
+    color: red;
+}
+#registerForm .log{
+    background-color: white;
+    border-color: orange;
+    color: orange;
+}
+#registerForm .log:hover{
+    background-color: orange;
+    color: white;
+}
+@media only screen and (max-width: 578px) {
+    form{
+        width: 250px;
+        height: 300px;
+        margin-top: 50%;
+        padding: 20px;
+    }
+    .reg{
+        margin-top: 50%;
+        height: 450px;
+
+    }
+    .btn{
+        width: 80px;
+    }
+    input{
+        padding: 5px;
+        margin: 3px;
+
+    }
+    .loginImg{
+        width: 70px;
+    }
+    .alert{
+        width: 300px;
+        margin: auto;
+    }
+}
