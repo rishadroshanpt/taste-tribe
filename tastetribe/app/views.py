@@ -76,7 +76,20 @@ def validate(req,name,password,email,otp):
 
 def home(req):
     if 'user' in req.session:
-        return render(req,'home.html')
+        dish=Dish.objects.all()
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        return render(req,'home.html',{'dish':dish,'ingr':ingr,'cook':cook})
+    else:
+        return redirect(shop_login)
+    
+def profile(req):
+    if 'user' in req.session:
+        user=User.objects.get(username=req.session['user'])
+        dish=Dish.objects.filter(user=user)
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        return render(req,'profile.html',{'dish':dish,'ingr':ingr,'cook':cook})
     else:
         return redirect(shop_login)
     
@@ -89,7 +102,7 @@ def addRecipe(req):
             cuisine=req.POST['cuisine']
             prep=req.POST['prep']
             cook=req.POST['cook']
-            data=Dish.objects.create(user=user,name=name,img=img,cuisine=cuisine,prep=prep,cook=cook)
+            data=Dish.objects.create(user=user,name=name,img=img,cuisine=cuisine,prep=prep,cook=cook,likes=0,rating=0)
             data.save()
             pk=data.pk
             return redirect("ingredients",pid=pk)
@@ -123,5 +136,74 @@ def cooking(req,pid):
             dish=Dish.objects.get(pk=pid)
             data=Cooking.objects.filter(dish=dish)
             return render(req,'cooking.html',{'data':data,'dish':dish})
+    else:
+        return redirect(shop_login)
+    
+def edit(req,pid):
+    if 'user' in req.session:
+        if req.method=='POST':
+            name=req.POST['name']
+            img=req.FILES.get('img')
+            cuisine=req.POST['cuisine']
+            prep=req.POST['prep']
+            cook=req.POST['cook']
+            if img:
+                Dish.objects.filter(pk=pid).update(name=name,cuisine=cuisine,prep=prep,cook=cook)
+                data=Dish.objects.get(pk=pid)
+                url=data.img.url
+                og_path=url.split('/')[-1]
+                os.remove('media/'+og_path)
+                data.img=img
+                data.save()
+            else:
+                Dish.objects.filter(pk=pid).update(name=name,cuisine=cuisine,prep=prep,cook=cook)
+            return redirect('edit',pid=pid)
+        else:
+            data=Dish.objects.get(pk=pid)
+            return render(req,'edit.html',{'data':data})
+    else:
+        return redirect(shop_login)
+    
+def editIngr(req,pid):
+    if 'user' in req.session:
+        if req.method=='POST':
+            ingr=req.POST['ingredients']
+            Ingredients.objects.filter(pk=pid).update(item=ingr)
+            data=Ingredients.objects.get(pk=pid)
+            return redirect('ingredients',pid=data.dish.pk)
+        else:
+            data=Ingredients.objects.get(pk=pid)
+            return render(req,'editIngr.html',{'data':data})
+    else:
+        return redirect(shop_login)
+    
+def deleteIngr(req,pid):
+    if 'user' in req.session:
+        data=Ingredients.objects.get(pk=pid)
+        dId=data.dish.pk
+        data.delete()
+        return redirect('ingredients',pid=dId)
+    else:
+        return redirect(shop_login)
+    
+def editCook(req,pid):
+    if 'user' in req.session:
+        if req.method=='POST':
+            steps=req.POST['steps']
+            Cooking.objects.filter(pk=pid).update(steps=steps)
+            data=Cooking.objects.get(pk=pid)
+            return redirect('cooking',pid=data.dish.pk)
+        else:
+            data=Cooking.objects.get(pk=pid)
+            return render(req,'editCook.html',{'data':data})
+    else:
+        return redirect(shop_login)
+    
+def deleteCook(req,pid):
+    if 'user' in req.session:
+        data=Cooking.objects.get(pk=pid)
+        dId=data.dish.pk
+        data.delete()
+        return redirect('cooking',pid=dId)
     else:
         return redirect(shop_login)

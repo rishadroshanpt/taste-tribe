@@ -1,5 +1,6 @@
 body{
     background-color: #818181;
+    color: white;
 }
 .sidebar {
     height: 100%;
@@ -84,10 +85,19 @@ body{
     top: 10px;
 }
 
-
-
-
-
+.edit .space{
+    display: flex;
+    justify-content: space-between;
+}
+.post{
+    border-bottom: 1px solid white;
+    padding: 50px;
+   
+}
+.post .img{
+    display: flex;
+    align-items: center;
+}
 
 
 
