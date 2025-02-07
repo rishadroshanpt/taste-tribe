@@ -16,5 +16,8 @@ urlpatterns=[
     path('deleteIngr/<pid>',views.deleteIngr,name='deleteIngr'),
     path('editCook/<pid>',views.editCook,name='editCook'),
     path('deleteCook/<pid>',views.deleteCook,name='deleteCook'),
+    path('addLike/<pid>',views.addLike),
+    path('removeLike/<pid>',views.removeLike),
+    path('viewUser/<pid>',views.viewUser),
 
 ]

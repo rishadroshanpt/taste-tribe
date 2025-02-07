@@ -1,3 +1,4 @@
+
 body{
     background-color: #818181;
     color: white;
@@ -97,6 +98,18 @@ body{
 .post .img{
     display: flex;
     align-items: center;
+}
+.redheart{
+    /* color: red; */
+    color: red;
+}
+.normheart{
+    color: white;
+}
+.viewUser{
+    text-decoration: none;
+    color: white;
+    font-weight: 700;
 }
 
 

@@ -12,6 +12,14 @@ class Dish(models.Model):
     likes=models.IntegerField()
     rating=models.IntegerField()
 
+class Like(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    dish=models.ForeignKey(Dish, on_delete=models.CASCADE)
+
+class Ratings(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    dish=models.ForeignKey(Dish, on_delete=models.CASCADE)
+
 class Ingredients(models.Model):
     dish=models.ForeignKey(Dish, on_delete=models.CASCADE)
     item=models.TextField()

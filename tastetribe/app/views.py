@@ -76,10 +76,13 @@ def validate(req,name,password,email,otp):
 
 def home(req):
     if 'user' in req.session:
-        dish=Dish.objects.all()
+        user=User.objects.get(username=req.session['user'])
+        dish=Dish.objects.all()[: : -1]
         ingr=Ingredients.objects.all()
         cook=Cooking.objects.all()
-        return render(req,'home.html',{'dish':dish,'ingr':ingr,'cook':cook})
+        like=Like.objects.all()
+        liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
+        return render(req,'home.html',{'dish':dish,'ingr':ingr,'cook':cook,'like':like,'liked_dishes':liked_dishes})
     else:
         return redirect(shop_login)
     
@@ -207,3 +210,58 @@ def deleteCook(req,pid):
         return redirect('cooking',pid=dId)
     else:
         return redirect(shop_login)
+    
+def addLike(req,pid):
+    if 'user' in req.session:
+        data=Dish.objects.get(pk=pid)
+        user=User.objects.get(username=req.session['user'])
+        data.likes+=1
+        data.save()
+        data=Like.objects.create(dish=Dish.objects.get(id=pid),user=user)
+        data.save()
+        return redirect(req.META.get('HTTP_REFERER'))
+    else:
+        return redirect(shop_login)
+    
+def removeLike(req,pid):
+    if 'user' in req.session:
+        data=Dish.objects.get(pk=pid)
+        user=User.objects.get(username=req.session['user'])
+        data.likes-=1
+        data.save()
+        data=Like.objects.get(dish=pid,user=user)
+        print(data)
+        data.delete()
+        # return redirect(home)
+        return redirect(req.META.get('HTTP_REFERER'))
+    else:
+        return redirect(shop_login)
+    
+def viewUser(req,pid):
+    if 'user' in req.session:
+        user1=User.objects.get(username=req.session['user'])
+        user=User.objects.get(pk=pid)
+        dish=Dish.objects.filter(user=user)[: : -1]
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        like=Like.objects.all()
+        liked_dishes = [like.dish.pk for like in like if like.user.pk == user1.pk]
+        return render(req,'viewUser.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes})
+    else:
+        return redirect(shop_login)
+    
+# def submit_rating(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body)
+#         dish_id = data.get('dishId')
+#         user_id = data.get('userId')
+#         rating_value = data.get('rating')
+
+#         # Get the dish and user objects
+#         dish = get_object_or_404(Dish, pk=dish_id)
+#         user = get_object_or_404(User, pk=user_id)
+
+#         # Create or update the rating
+#         rating, created = Ratings.objects.create(dish=dish, user=user)
+#         rating.value = rating_value
+#         rating.save()
