@@ -10,7 +10,6 @@ class Dish(models.Model):
     prep=models.IntegerField()
     cook=models.IntegerField()
     likes=models.IntegerField()
-    rating=models.IntegerField()
 
 class Like(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
@@ -19,6 +18,8 @@ class Like(models.Model):
 class Ratings(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     dish=models.ForeignKey(Dish, on_delete=models.CASCADE)
+    ratings=models.TextField()
+
 
 class Ingredients(models.Model):
     dish=models.ForeignKey(Dish, on_delete=models.CASCADE)

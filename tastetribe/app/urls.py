@@ -19,5 +19,6 @@ urlpatterns=[
     path('addLike/<pid>',views.addLike),
     path('removeLike/<pid>',views.removeLike),
     path('viewUser/<pid>',views.viewUser),
+    path('rating/<pid>',views.rating,name='rating'),
 
 ]

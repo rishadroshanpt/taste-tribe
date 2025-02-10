@@ -35,23 +35,12 @@
                             <img src="{{i.img.url}}" alt="" width="500px">
                             <div id="like-section">
                                 {% if i.pk in liked_dishes %}
-                                <h4><a class="like-button" href="removeLike/{{ i.pk }}"><i class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
+                                <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.pk }}"><i class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
                                 {% else %}
-                                <h4><a class="like-button" href="addLike/{{ i.pk }}"><i class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
+                                <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.pk }}"><i class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
                                 {% endif %}
+                                <a href="rating/{{i.pk}}" style="display: inline;">Ratings</a>
                             </div>
-                            <div class="rating">
-                                <h5>Rate this dish:</h5>
-                                <span class="star" data-value="1">&#9733;</span>
-                                <span class="star" data-value="2">&#9733;</span>
-                                <span class="star" data-value="3">&#9733;</span>
-                                <span class="star" data-value="4">&#9733;</span>
-                                <span class="star" data-value="5">&#9733;</span>
-                                <input type="hidden" id="dish-rating" value="0"> <!-- Hidden input to store the rating value -->
-                            </div>
-                            
-                            <!-- Optional: Display current rating -->
-                            <h5>Current rating: <span id="current-rating">Not rated yet</span></h5>
 
                             <h4>Name of the dish : {{i.name}}</h4>
                             <h4> Cuisine : {{i.cuisine}}</h4>

@@ -105,7 +105,7 @@ def addRecipe(req):
             cuisine=req.POST['cuisine']
             prep=req.POST['prep']
             cook=req.POST['cook']
-            data=Dish.objects.create(user=user,name=name,img=img,cuisine=cuisine,prep=prep,cook=cook,likes=0,rating=0)
+            data=Dish.objects.create(user=user,name=name,img=img,cuisine=cuisine,prep=prep,cook=cook,likes=0)
             data.save()
             pk=data.pk
             return redirect("ingredients",pid=pk)
@@ -250,18 +250,17 @@ def viewUser(req,pid):
     else:
         return redirect(shop_login)
     
-# def submit_rating(request):
-#     if request.method == 'POST':
-#         data = json.loads(request.body)
-#         dish_id = data.get('dishId')
-#         user_id = data.get('userId')
-#         rating_value = data.get('rating')
-
-#         # Get the dish and user objects
-#         dish = get_object_or_404(Dish, pk=dish_id)
-#         user = get_object_or_404(User, pk=user_id)
-
-#         # Create or update the rating
-#         rating, created = Ratings.objects.create(dish=dish, user=user)
-#         rating.value = rating_value
-#         rating.save()
+def rating(req,pid):
+    if 'user' in req.session:
+        user=User.objects.get(username=req.session['user'])
+        dish=Dish.objects.get(pk=pid)
+        if req.method=='POST':
+            rate=req.POST['rating']
+            data=Ratings.objects.create(user=user,dish=dish,ratings=rate)
+            data.save()
+            return redirect('rating',pid=pid)
+        else:
+            data=Ratings.objects.filter(pk=pid)
+            return render(req,'ratings.html',{'data':data})
+    else:
+        return redirect(shop_login)

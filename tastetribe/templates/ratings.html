@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% if data %}
+    {% for i in data %}
+    {{i.ratings}} <br>
+    {{i.user.first_name}} <br>
+    {{i.dish.name}}
+    {% endfor %}
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <label for="">GIve your feedback</label>
+        <input type="text" name="rating" id="">
+        <input type="submit" value="submit">
+    </form>
+</body>
+</html>

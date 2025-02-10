@@ -111,7 +111,9 @@ body{
     color: white;
     font-weight: 700;
 }
-
+#like-section{
+    display: inline-block;
+}
 
 
 
