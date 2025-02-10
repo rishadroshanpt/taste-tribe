@@ -21,12 +21,21 @@
                 <div id="sidebar" class="sidebar">
                     <a href="../home">Home</a>
                     <a href="../addRecipe">Add Recipe</a>
-                    <a href="../profile">Profile</a>
                     <a href="#">Activity</a>
-                    <a href="#">Logout</a>
+                    <a href="../profile">Profile</a>
+
                 </div>
             </div>
             <div class="col-lg-10">
+                <div class="row">
+                    {% if user1 != user %}
+                    {% if is_following %}
+                    <a href="../unfollow/{{user.pk}}">Unfollow</a>
+                    {% else %}
+                    <a href="../follow/{{user.pk}}">Follow</a>
+                    {% endif %}
+                    {% endif %}
+                </div>
                 <div class="row ">
                     {% for i in dish %}
                     <div class="row post">
@@ -35,12 +44,15 @@
                             <img src="{{i.img.url}}" alt="" width="500px">
                             <div id="like-section">
                                 {% if i.pk in liked_dishes %}
-                                <h4><a class="like-button"  href="../removeLike/{{ i.pk }}"><i class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
+                                <h4 style="display: inline;"><a class="like-button" href="../removeLike/{{ i.pk }}"><i
+                                            class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
                                 {% else %}
-                                <h4><a class="like-button"  href="../addLike/{{ i.pk }}"><i class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
+                                <h4 style="display: inline;"><a class="like-button" href="../addLike/{{ i.pk }}"><i
+                                            class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
                                 {% endif %}
+                                <a href="../rating/{{i.pk}}" style="display: inline;">Ratings</a>
                             </div>
-                            
+
                             <h4>Name of the dish : {{i.name}}</h4>
                             <h4> Cuisine : {{i.cuisine}}</h4>
                             <h4> Preperation time : {{i.prep}} minutes</h4>
@@ -82,7 +94,7 @@
         </div>
     </div>
 
-<script src="{% static 'js/java.js' %}"></script>
+    <script src="{% static 'js/java.js' %}"></script>
 </body>
 
 </html>

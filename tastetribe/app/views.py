@@ -92,7 +92,14 @@ def profile(req):
         dish=Dish.objects.filter(user=user)
         ingr=Ingredients.objects.all()
         cook=Cooking.objects.all()
-        return render(req,'profile.html',{'dish':dish,'ingr':ingr,'cook':cook})
+        like=Like.objects.all()
+        liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
+        post=dish.count()
+        followers = user.followers.all()
+        following = user.following.all()
+        followers=followers.count()
+        following=following.count()
+        return render(req,'profile.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'user':user,'post':post,'followers':followers,'following':following})
     else:
         return redirect(shop_login)
     
@@ -246,7 +253,8 @@ def viewUser(req,pid):
         cook=Cooking.objects.all()
         like=Like.objects.all()
         liked_dishes = [like.dish.pk for like in like if like.user.pk == user1.pk]
-        return render(req,'viewUser.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes})
+        is_following =  Follow.objects.filter(follower=user1, following=user).exists()
+        return render(req,'viewUser.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'is_following':is_following,'user':user})
     else:
         return redirect(shop_login)
     
@@ -260,7 +268,23 @@ def rating(req,pid):
             data.save()
             return redirect('rating',pid=pid)
         else:
-            data=Ratings.objects.filter(pk=pid)
-            return render(req,'ratings.html',{'data':data})
+            data=Ratings.objects.filter(dish=pid)
+            ingr=Ingredients.objects.filter(dish=pid)
+            cook=Cooking.objects.filter(dish=pid)
+            return render(req,'ratings.html',{'data':data,'dish':dish,'ingr':ingr,'cook':cook})
     else:
         return redirect(shop_login)
+    
+def follow_user(req, uid):
+    user=User.objects.get(username=req.session['user'])
+    user_to_follow = User.objects.get(pk=uid)
+    if user != user_to_follow:  # A user cannot follow themselves
+        Follow.objects.create(follower=user, following=user_to_follow)
+    return redirect('viewUser', pid=uid)
+
+def unfollow_user(req, uid):
+    user=User.objects.get(username=req.session['user'])
+    user_to_unfollow = User.objects.get(pk=uid)
+    if user != user_to_unfollow:
+        Follow.objects.filter(follower=user, following=user_to_unfollow).delete()
+    return redirect('viewUser', pid=uid)

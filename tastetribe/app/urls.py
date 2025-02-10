@@ -18,7 +18,9 @@ urlpatterns=[
     path('deleteCook/<pid>',views.deleteCook,name='deleteCook'),
     path('addLike/<pid>',views.addLike),
     path('removeLike/<pid>',views.removeLike),
-    path('viewUser/<pid>',views.viewUser),
+    path('viewUser/<pid>',views.viewUser,name='viewUser'),
     path('rating/<pid>',views.rating,name='rating'),
+    path('follow/<uid>', views.follow_user, name='follow_user'),
+    path('unfollow/<uid>', views.unfollow_user, name='unfollow_user'),
 
 ]

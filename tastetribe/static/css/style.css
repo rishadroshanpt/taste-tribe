@@ -28,7 +28,10 @@ body{
     transition: 0.3s;
 
 }
-
+.sidebar .active{
+    color: white;
+    font-weight: 700;
+}
 .sidebar a:hover {
     color: #f1f1f1;
 }
@@ -111,11 +114,37 @@ body{
     color: white;
     font-weight: 700;
 }
-#like-section{
+#like-section,.first{
+    display: inline-block;
+    justify-content: space-between;
+}
+.rating{
+    margin-top: 50px;
+}
+.ratings{
+    background-color: rgb(173, 171, 171);
+    border-radius: 15px;
+    color: black;
+}
+.ratings p{
+    font-size: .8vw;
+}
+.ratings h5{
+    font-size: 1.1vw;
+}
+.rate{
+    padding: 20px;
+}
+.user{
+    padding: 50px;
+    background-color: #a6a4a4;
+}
+.user .col-7{
     display: inline-block;
 }
-
-
+.user .det{
+    display: inline;
+}
 
 
 

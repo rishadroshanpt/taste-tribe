@@ -19,11 +19,11 @@
         <div class="row">
             <div class="col-lg-2">
                 <div id="sidebar" class="sidebar">
-                    <a href="#">Home</a>
+                    <a href="#" class="active">Home</a>
                     <a href="addRecipe">Add Recipe</a>
+                    <a href="#">Notifications</a>
                     <a href="profile">Profile</a>
-                    <a href="#">Activity</a>
-                    <a href="logout">Logout</a>
+                    <!-- <a href="logout">Logout</a> -->
                 </div>
             </div>
             <div class="col-lg-10">
@@ -31,7 +31,18 @@
                     {% for i in dish %}
                     <div class="post row">
                         <div class="col-lg-6">
-                            <h5><a href="viewUser/{{i.user.pk}}" class="viewUser">{{i.user.first_name}}</a></h5>
+                            <div class="first">
+                                <h5 style="display: inline;"><a href="viewUser/{{i.user.pk}}" class="viewUser">{{i.user.first_name}}</a></h5>
+                                <div class="dropdown" style="display: inline;">
+                                    <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
+                                        <i class="fa-solid fa-bars"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                      <li><a class="dropdown-item" href="report/{{i.pk}}">Report</a></li>
+                                      <li><a class="dropdown-item" href="save/{{i.pk}}">Save</a></li>
+                                    </ul>
+                                  </div> 
+                            </div>
                             <img src="{{i.img.url}}" alt="" width="500px">
                             <div id="like-section">
                                 {% if i.pk in liked_dishes %}
