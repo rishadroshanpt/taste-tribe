@@ -20,6 +20,9 @@ class Ratings(models.Model):
     dish=models.ForeignKey(Dish, on_delete=models.CASCADE)
     ratings=models.TextField()
 
+class Saved(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    dish=models.ForeignKey(Dish, on_delete=models.CASCADE)
 
 class Ingredients(models.Model):
     dish=models.ForeignKey(Dish, on_delete=models.CASCADE)

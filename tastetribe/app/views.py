@@ -19,7 +19,7 @@ def shop_login(req):
         data=authenticate(username=uname,password=password)
         if data:
                 req.session['user']=uname   #create session
-                return redirect(home)
+                return redirect(userHome)
         else:
             messages.warning(req,'Invalid username or password.')
             return redirect(shop_login)
@@ -72,17 +72,24 @@ def validate(req,name,password,email,otp):
 
 
 
-
-
 def home(req):
+        dish=Dish.objects.all()[: : -1]
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        return render(req,'home.html',{'dish':dish,'ingr':ingr,'cook':cook})
+
+
+def userHome(req):
     if 'user' in req.session:
         user=User.objects.get(username=req.session['user'])
         dish=Dish.objects.all()[: : -1]
         ingr=Ingredients.objects.all()
         cook=Cooking.objects.all()
         like=Like.objects.all()
+        save=Saved.objects.all()
         liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
-        return render(req,'home.html',{'dish':dish,'ingr':ingr,'cook':cook,'like':like,'liked_dishes':liked_dishes})
+        saved_dishes = [save.dish.pk for save in save if save.user.pk == user.pk]
+        return render(req,'home.html',{'dish':dish,'ingr':ingr,'cook':cook,'like':like,'liked_dishes':liked_dishes,'saved_dishes':saved_dishes})
     else:
         return redirect(shop_login)
     
@@ -93,13 +100,35 @@ def profile(req):
         ingr=Ingredients.objects.all()
         cook=Cooking.objects.all()
         like=Like.objects.all()
+        save=Saved.objects.all()
         liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
+        saved_dishes = [save.dish.pk for save in save if save.user.pk == user.pk]
         post=dish.count()
-        followers = user.followers.all()
-        following = user.following.all()
-        followers=followers.count()
-        following=following.count()
-        return render(req,'profile.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'user':user,'post':post,'followers':followers,'following':following})
+        followers = (user.followers.all()).count()
+        following = (user.following.all()).count()
+        return render(req,'profile.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'user':user,'post':post,'followers':followers,'following':following,'saved_dishes':saved_dishes})
+    else:
+        return redirect(shop_login)
+    
+def viewUser(req,pid):
+    if 'user' in req.session:
+        user1=User.objects.get(username=req.session['user'])
+        user=User.objects.get(pk=pid)
+        dish=Dish.objects.filter(user=user)
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        like=Like.objects.all()
+        save=Saved.objects.all()
+        liked_dishes = [like.dish.pk for like in like if like.user.pk == user1.pk]
+        saved_dishes = [save.dish.pk for save in save if save.user.pk == user1.pk]
+        post=dish.count()
+        followers = (user.followers.all()).count()
+        following = (user.following.all()).count()
+        is_following =  Follow.objects.filter(follower=user1, following=user).exists()
+        if user1 == user :
+            return redirect(profile)
+        else:
+            return render(req,'viewUser.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'is_following':is_following,'user':user,'user1':user1,'post':post,'followers':followers,'following':following,'saved_dishes':saved_dishes})
     else:
         return redirect(shop_login)
     
@@ -244,20 +273,7 @@ def removeLike(req,pid):
     else:
         return redirect(shop_login)
     
-def viewUser(req,pid):
-    if 'user' in req.session:
-        user1=User.objects.get(username=req.session['user'])
-        user=User.objects.get(pk=pid)
-        dish=Dish.objects.filter(user=user)[: : -1]
-        ingr=Ingredients.objects.all()
-        cook=Cooking.objects.all()
-        like=Like.objects.all()
-        liked_dishes = [like.dish.pk for like in like if like.user.pk == user1.pk]
-        is_following =  Follow.objects.filter(follower=user1, following=user).exists()
-        return render(req,'viewUser.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'is_following':is_following,'user':user})
-    else:
-        return redirect(shop_login)
-    
+
 def rating(req,pid):
     if 'user' in req.session:
         user=User.objects.get(username=req.session['user'])
@@ -276,15 +292,53 @@ def rating(req,pid):
         return redirect(shop_login)
     
 def follow_user(req, uid):
-    user=User.objects.get(username=req.session['user'])
-    user_to_follow = User.objects.get(pk=uid)
-    if user != user_to_follow:  # A user cannot follow themselves
-        Follow.objects.create(follower=user, following=user_to_follow)
-    return redirect('viewUser', pid=uid)
+    if 'user' in req.session:
+        user=User.objects.get(username=req.session['user'])
+        user_to_follow = User.objects.get(pk=uid)
+        if user != user_to_follow:  # A user cannot follow themselves
+            Follow.objects.create(follower=user, following=user_to_follow)
+        return redirect('viewUser', pid=uid)
+    else:
+        return redirect(shop_login)
 
 def unfollow_user(req, uid):
-    user=User.objects.get(username=req.session['user'])
-    user_to_unfollow = User.objects.get(pk=uid)
-    if user != user_to_unfollow:
-        Follow.objects.filter(follower=user, following=user_to_unfollow).delete()
-    return redirect('viewUser', pid=uid)
+    if 'user' in req.session:
+        user=User.objects.get(username=req.session['user'])
+        user_to_unfollow = User.objects.get(pk=uid)
+        if user != user_to_unfollow:
+            Follow.objects.filter(follower=user, following=user_to_unfollow).delete()
+        return redirect('viewUser', pid=uid)
+    else:
+        return redirect(shop_login)
+
+def save(req,pid):
+    if 'user' in req.session:
+        user=User.objects.get(username=req.session['user'])
+        dish=Dish.objects.get(pk=pid)
+        data=Saved.objects.create(dish=dish,user=user)
+        data.save()
+        return redirect(req.META.get('HTTP_REFERER'))
+    else:
+        return redirect(shop_login) 
+    
+def unsave(req,pid):
+    if 'user' in req.session:
+        user=User.objects.get(username=req.session['user'])
+        dish=Dish.objects.get(pk=pid)
+        data=Saved.objects.get(dish=dish,user=user)
+        data.delete()
+        return redirect(req.META.get('HTTP_REFERER'))
+    else:
+        return redirect(shop_login) 
+
+def saved(req):
+    if 'user' in req.session:
+        user=User.objects.get(username=req.session['user'])
+        data=Saved.objects.filter(user=user)
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        like=Like.objects.all()
+        liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
+        return render(req,'saved.html',{'data':data,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes})
+    else:
+        return redirect(shop_login)

@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-lg-2">
                 <div id="sidebar" class="sidebar">
-                    <a href="#" class="active">Home</a>
+                    <a href="home">Home</a>
                     <a href="addRecipe">Add Recipe</a>
                     <a href="#">Notifications</a>
                     <a href="profile">Profile</a>
@@ -28,49 +28,42 @@
             </div>
             <div class="col-lg-10">
                 <div class="row">
-                    {% for i in dish %}
+                    {% for i in data %}
                     <div class="post row">
                         <div class="col-lg-6">
-                            <div class="first" id="like-section" style="display: flex; justify-content: space-between; align-items: center;">
-                                <h5 style="display: inline;"><a href="viewUser/{{i.user.pk}}"
-                                        class="viewUser">{{i.user.first_name}}</a></h5>
+                            <div class="first" id="like-section">
+                                <h5 style="display: inline;"><a href="viewUser/{{i.dish.user.pk}}" class="viewUser">{{i.dish.user.first_name}}</a></h5>
                                 <div class="dropdown" style="display: inline;">
                                     <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
                                         <i class="fa-solid fa-bars"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="report/{{i.pk}}">Report</a></li>
-                                        {% if i.pk in saved_dishes %}
-                                        <li><a class="dropdown-item" href="unsave/{{i.pk}}">Unsave</a></li>
-                                        {% else %}
-                                        <li><a class="dropdown-item" href="save/{{i.pk}}">Save</a></li>
-                                        {% endif %}
+                                      <li><a class="dropdown-item" href="report/{{i.dish.pk}}">Report</a></li>
+                                      <li><a class="dropdown-item" href="unsave/{{i.dish.pk}}">Unsave</a></li>
                                     </ul>
-                                </div>
+                                  </div> 
                             </div>
-                            <img src="{{i.img.url}}" alt="" width="500px">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                {% if i.pk in liked_dishes %}
-                                <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.pk }}"><i
-                                            class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
+                            <img src="{{i.dish.img.url}}" alt="" width="500px">
+                            <div>
+                                {% if i.dish.pk in liked_dishes %}
+                                <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.dish.pk }}"><i class="fa-solid fa-heart redheart"></i></a> {{ i.dish.likes }}</h4>
                                 {% else %}
-                                <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.pk }}"><i
-                                            class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
+                                <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.dish.pk }}"><i class="fa-regular fa-heart normheart"></i></a> {{ i.dish.likes }}</h4>
                                 {% endif %}
-                                <a href="rating/{{i.pk}}" style="display: inline;">Ratings</a>
+                                <a href="rating/{{i.dish.pk}}" style="display: inline;">Ratings</a>
                             </div>
 
-                            <h4>Name of the dish : {{i.name}}</h4>
-                            <h4> Cuisine : {{i.cuisine}}</h4>
-                            <h4> Preperation time : {{i.prep}} minutes</h4>
-                            <h4> Cooking time : {{i.cook}} minutes</h4>
+                            <h4>Name of the dish : {{i.dish.name}}</h4>
+                            <h4> Cuisine : {{i.dish.cuisine}}</h4>
+                            <h4> Preperation time : {{i.dish.prep}} minutes</h4>
+                            <h4> Cooking time : {{i.dish.cook}} minutes</h4>
                         </div>
                         <div class="col-lg-6">
                             <div class="row">
                                 <div class="col-lg-6">
                                     Ingredients :
                                     {% for j in ingr %}
-                                    {% if i.pk == j.dish.pk %}
+                                    {% if i.dish.pk == j.dish.pk %}
                                     <ul>
                                         <li>
                                             <h6>{{j.item}}</h6>
@@ -82,7 +75,7 @@
                                 <div class="col-lg-6">
                                     Cooking steps :
                                     {% for j in cook %}
-                                    {% if i.pk == j.dish.pk %}
+                                    {% if i.dish.pk == j.dish.pk %}
                                     <ul>
                                         <li>
                                             <h6>{{j.steps}}</h6>

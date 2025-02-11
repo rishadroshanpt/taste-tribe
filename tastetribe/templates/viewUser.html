@@ -27,22 +27,57 @@
                 </div>
             </div>
             <div class="col-lg-10">
+                <div class="row user">
+                    <div class="col-5">
+                        <h6>{{user.first_name}}</h6>
+                    </div>
+                    <div class="col-7">
+                        <div class="det">
+                            <h4>{{post}}</h4>
+                            <h5>posts</h5>
+                        </div>
+                        <div class="det">
+                            <h4>{{followers}}</h4>
+                            <h5>Followers</h5>
+                        </div>
+                        <div class="det">
+                            <h4>{{following}}</h4>
+                            <h5>Following</h5>
+                        </div>
+                        {% if user1 != user %}
+                        {% if is_following %}
+                        <a href="../unfollow/{{user.pk}}">Unfollow</a>
+                        {% else %}
+                        <a href="../follow/{{user.pk}}">Follow</a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
                 <div class="row">
-                    {% if user1 != user %}
-                    {% if is_following %}
-                    <a href="../unfollow/{{user.pk}}">Unfollow</a>
-                    {% else %}
-                    <a href="../follow/{{user.pk}}">Follow</a>
-                    {% endif %}
-                    {% endif %}
+
                 </div>
                 <div class="row ">
                     {% for i in dish %}
                     <div class="row post">
                         <div class="col-lg-6">
-                            <h5>{{i.user.first_name}}</h5>
+                            <div class="first"  id="like-section">
+                                <h5 style="display: inline;">{{i.user.first_name}}</h5>
+                                <div class="dropdown" style="display: inline;">
+                                    <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
+                                        <i class="fa-solid fa-bars"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="report/{{i.pk}}">Report</a></li>
+                                        {% if i.pk in saved_dishes %}
+                                        <li><a class="dropdown-item" href="../unsave/{{i.pk}}">Unsave</a></li>
+                                        {% else %}
+                                        <li><a class="dropdown-item" href="../save/{{i.pk}}">Save</a></li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </div>
                             <img src="{{i.img.url}}" alt="" width="500px">
-                            <div id="like-section">
+                            <div>
                                 {% if i.pk in liked_dishes %}
                                 <h4 style="display: inline;"><a class="like-button" href="../removeLike/{{ i.pk }}"><i
                                             class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>

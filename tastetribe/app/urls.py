@@ -2,11 +2,12 @@ from django.urls import path
 from . import views
 
 urlpatterns=[
-    path('',views.shop_login),
+    path('shop_login',views.shop_login),
     path('register',views.register),
     path('validate/<name>/<password>/<email>/<otp>',views.validate,name="validate"),
     path('logout',views.shp_logout),
-    path('home',views.home),
+    path('',views.home),
+    path('userHome',views.userHome),
     path('profile',views.profile),
     path('addRecipe',views.addRecipe),
     path('ingredients/<pid>',views.ingredients,name='ingredients'),
@@ -22,5 +23,9 @@ urlpatterns=[
     path('rating/<pid>',views.rating,name='rating'),
     path('follow/<uid>', views.follow_user, name='follow_user'),
     path('unfollow/<uid>', views.unfollow_user, name='unfollow_user'),
+    path('save/<pid>',views.save),
+    path('unsave/<pid>',views.unsave),
+    path('saved',views.saved),
+
 
 ]

@@ -136,14 +136,10 @@ body{
     padding: 20px;
 }
 .user{
-    padding: 50px;
     background-color: #a6a4a4;
 }
-.user .col-7{
-    display: inline-block;
-}
-.user .det{
-    display: inline;
+.user .col-5{
+    padding: 50px;
 }
 
 
