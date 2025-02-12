@@ -33,9 +33,9 @@ class Cooking(models.Model):
     steps=models.TextField()
 
 class Bio(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
-    img=models.FileField()
-    bio=models.TextField()
+    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    img = models.FileField(upload_to='profile_pics/', default='profile_pics/default.png')
+    bio=models.TextField(default="Hi,I'm here")
 
 class Follow(models.Model):
     follower = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
@@ -49,3 +49,10 @@ class Follow(models.Model):
     def __str__(self):
         return f"{self.follower.username} follows {self.following.username}"
 
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Notification for {self.user.username}"

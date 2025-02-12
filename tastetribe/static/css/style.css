@@ -139,9 +139,30 @@ body{
     background-color: #a6a4a4;
 }
 .user .col-5{
-    padding: 50px;
+    padding: 10px 50px;
 }
-
+/* Sidebar container */
+.notification{
+    position: relative;
+}
+.notification-badge {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 14px;
+    position: absolute;
+    top: 15px; /* Adjust as necessary */
+    right: 100px; /* Adjust as necessary */
+    transform: translate(50%, -50%);
+    z-index: 10; /* Ensure it appears above other elements */
+}
+.profilePic{
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 50%;
+}
 
 
 

@@ -21,14 +21,25 @@
                 <div id="sidebar" class="sidebar">
                     <a href="userHome">Home</a>
                     <a href="addRecipe">Add Recipe</a>
-                    <a href="#">Notifications</a>
+                    <div class="notification">
+                        <a href="notifications">Notifications</a>
+                        {% if unread_count > 0 %}
+                        <span class="notification-badge">{{ unread_count }}</span>
+                        {% else %}
+                        <span class="notification-badge">0</span>
+                        {% endif %}
+                    </div>
+
                     <a href="profile" class="active">Profile</a>
                 </div>
             </div>
             <div class="col-lg-10">
                 <div class="row user">
                     <div class="col-5">
+                        <h6>{{user.username}}</h6>
+                        <img class="profilePic" src="{{user.bio.img.url}}" alt="">
                         <h6>{{user.first_name}}</h6>
+                        <h6>{{user.bio.bio}}</h6>
                     </div>
                     <div class="col-5" style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="det">
@@ -51,6 +62,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="saved">Saved</a></li>
+                                <li><a class="dropdown-item" href="editProfile">Edit Profile</a></li>
                                 <li><a class="dropdown-item" href="logout">Logout</a></li>
                             </ul>
                         </div>
@@ -60,7 +72,8 @@
                     {% for i in dish %}
                     <div class="row post">
                         <div class="col-lg-6">
-                            <div class="first"  id="like-section" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="first" id="like-section"
+                                style="display: flex; justify-content: space-between; align-items: center;">
                                 <h5 style="display: inline;">{{i.user.first_name}}</h5>
                                 <div class="dropdown" style="display: inline;">
                                     <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">

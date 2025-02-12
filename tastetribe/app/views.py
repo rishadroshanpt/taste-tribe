@@ -7,6 +7,9 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings   
 import math,random
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import Follow, Like, Notification
 
 
 # Create your views here.
@@ -73,6 +76,9 @@ def validate(req,name,password,email,otp):
 
 
 def home(req):
+    if 'user' in req.session:
+        return redirect(userHome)
+    else:
         dish=Dish.objects.all()[: : -1]
         ingr=Ingredients.objects.all()
         cook=Cooking.objects.all()
@@ -89,7 +95,8 @@ def userHome(req):
         save=Saved.objects.all()
         liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
         saved_dishes = [save.dish.pk for save in save if save.user.pk == user.pk]
-        return render(req,'home.html',{'dish':dish,'ingr':ingr,'cook':cook,'like':like,'liked_dishes':liked_dishes,'saved_dishes':saved_dishes})
+        unread_count = Notification.objects.filter(user=user, read=False).count()
+        return render(req,'home.html',{'dish':dish,'ingr':ingr,'cook':cook,'like':like,'liked_dishes':liked_dishes,'saved_dishes':saved_dishes,'unread_count':unread_count})
     else:
         return redirect(shop_login)
     
@@ -106,7 +113,8 @@ def profile(req):
         post=dish.count()
         followers = (user.followers.all()).count()
         following = (user.following.all()).count()
-        return render(req,'profile.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'user':user,'post':post,'followers':followers,'following':following,'saved_dishes':saved_dishes})
+        unread_count = Notification.objects.filter(user=user, read=False).count()
+        return render(req,'profile.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'user':user,'post':post,'followers':followers,'following':following,'saved_dishes':saved_dishes,'unread_count':unread_count})
     else:
         return redirect(shop_login)
     
@@ -124,11 +132,12 @@ def viewUser(req,pid):
         post=dish.count()
         followers = (user.followers.all()).count()
         following = (user.following.all()).count()
+        unread_count = Notification.objects.filter(user=user1, read=False).count()
         is_following =  Follow.objects.filter(follower=user1, following=user).exists()
         if user1 == user :
             return redirect(profile)
         else:
-            return render(req,'viewUser.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'is_following':is_following,'user':user,'user1':user1,'post':post,'followers':followers,'following':following,'saved_dishes':saved_dishes})
+            return render(req,'viewUser.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'is_following':is_following,'user':user,'user1':user1,'post':post,'followers':followers,'following':following,'saved_dishes':saved_dishes,'unread_count':unread_count})
     else:
         return redirect(shop_login)
     
@@ -146,7 +155,8 @@ def addRecipe(req):
             pk=data.pk
             return redirect("ingredients",pid=pk)
         else:
-            return render(req,'addRecipe.html')
+            unread_count = Notification.objects.filter(user=User.objects.get(username=req.session['user']), read=False).count()
+            return render(req,'addRecipe.html',{'unread_count':unread_count})
     else:
         return redirect(shop_login)
     
@@ -160,7 +170,8 @@ def ingredients(req,pid):
         else:
             dish=Dish.objects.get(pk=pid)
             data=Ingredients.objects.filter(dish=dish)
-            return render(req,'ingredients.html',{'data':data,'dish':dish})
+            unread_count = Notification.objects.filter(user=User.objects.get(username=req.session['user']), read=False).count()
+            return render(req,'ingredients.html',{'data':data,'dish':dish,'unread_count':unread_count})
     else:
         return redirect(shop_login)
     
@@ -174,7 +185,8 @@ def cooking(req,pid):
         else:
             dish=Dish.objects.get(pk=pid)
             data=Cooking.objects.filter(dish=dish)
-            return render(req,'cooking.html',{'data':data,'dish':dish})
+            unread_count = Notification.objects.filter(user=User.objects.get(username=req.session['user']), read=False).count()
+            return render(req,'cooking.html',{'data':data,'dish':dish,'unread_count':unread_count})
     else:
         return redirect(shop_login)
     
@@ -199,7 +211,8 @@ def edit(req,pid):
             return redirect('edit',pid=pid)
         else:
             data=Dish.objects.get(pk=pid)
-            return render(req,'edit.html',{'data':data})
+            unread_count = Notification.objects.filter(user=User.objects.get(username=req.session['user']), read=False).count()
+            return render(req,'edit.html',{'data':data,'unread_count':unread_count})
     else:
         return redirect(shop_login)
     
@@ -212,7 +225,8 @@ def editIngr(req,pid):
             return redirect('ingredients',pid=data.dish.pk)
         else:
             data=Ingredients.objects.get(pk=pid)
-            return render(req,'editIngr.html',{'data':data})
+            unread_count = Notification.objects.filter(user=User.objects.get(username=req.session['user']), read=False).count()
+            return render(req,'editIngr.html',{'data':data,'unread_count':unread_count})
     else:
         return redirect(shop_login)
     
@@ -234,7 +248,8 @@ def editCook(req,pid):
             return redirect('cooking',pid=data.dish.pk)
         else:
             data=Cooking.objects.get(pk=pid)
-            return render(req,'editCook.html',{'data':data})
+            unread_count = Notification.objects.filter(user=User.objects.get(username=req.session['user']), read=False).count()
+            return render(req,'editCook.html',{'data':data,'unread_count':unread_count})
     else:
         return redirect(shop_login)
     
@@ -287,7 +302,8 @@ def rating(req,pid):
             data=Ratings.objects.filter(dish=pid)
             ingr=Ingredients.objects.filter(dish=pid)
             cook=Cooking.objects.filter(dish=pid)
-            return render(req,'ratings.html',{'data':data,'dish':dish,'ingr':ingr,'cook':cook})
+            unread_count = Notification.objects.filter(user=User.objects.get(username=req.session['user']), read=False).count()
+            return render(req,'ratings.html',{'data':data,'dish':dish,'ingr':ingr,'cook':cook,'unread_count':unread_count})
     else:
         return redirect(shop_login)
     
@@ -338,7 +354,41 @@ def saved(req):
         ingr=Ingredients.objects.all()
         cook=Cooking.objects.all()
         like=Like.objects.all()
+        unread_count = Notification.objects.filter(user=User.objects.get(username=req.session['user']), read=False).count()
         liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
-        return render(req,'saved.html',{'data':data,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes})
+        return render(req,'saved.html',{'data':data,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'unread_count':unread_count})
+    else:
+        return redirect(shop_login)
+    
+
+
+def notifications_view(req):
+    user=User.objects.get(username=req.session['user'])
+    notifications = Notification.objects.filter(user=user)
+    notifications.filter(read=False).update(read=True)
+    return render(req, 'notifications.html', {'notifications': notifications})
+
+def editProfile(req):
+    if 'user' in req.session:
+        user=User.objects.get(username=req.session['user'])
+        if req.method=='POST':
+            img=req.FILES.get('img')
+            bio=req.POST['bio']
+            name=req.POST['name']
+            if img:
+                User.objects.filter(pk=user.pk).update(first_name=name)
+                Bio.objects.filter(user=user).update(bio=bio,img=img)
+                # data=Bio.objects.get(user=user)
+                # url=data.img.url
+                # og_path=url.split('/')[-1]
+                # os.remove('media/profile_pics/'+og_path)
+                # data.img=img
+                # data.save()
+            else:
+                User.objects.filter(pk=user.pk).update(first_name=name)
+                Bio.objects.filter(user=user).update(bio=bio)
+            return redirect(profile)
+        else:
+            return render(req,'editProfile.html',{'user':user})
     else:
         return redirect(shop_login)

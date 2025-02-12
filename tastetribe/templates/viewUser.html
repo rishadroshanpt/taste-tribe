@@ -19,9 +19,16 @@
         <div class="row">
             <div class="col-lg-2">
                 <div id="sidebar" class="sidebar">
-                    <a href="../home">Home</a>
+                    <a href="../userHome">Home</a>
                     <a href="../addRecipe">Add Recipe</a>
-                    <a href="#">Activity</a>
+                    <div class="notification">
+                        <a href="notifications">Notifications</a>
+                        {% if unread_count > 0 %}
+                        <span class="notification-badge">{{ unread_count }}</span>
+                        {% else %}
+                        <span class="notification-badge">0</span>
+                        {% endif %}
+                    </div>
                     <a href="../profile">Profile</a>
 
                 </div>
@@ -29,7 +36,10 @@
             <div class="col-lg-10">
                 <div class="row user">
                     <div class="col-5">
+                        <h6>{{user.username}}</h6>
+                        <img class="profilePic" src="{{user.bio.img}}" alt="">
                         <h6>{{user.first_name}}</h6>
+                        <h6>{{user.bio.bio}}</h6>
                     </div>
                     <div class="col-7">
                         <div class="det">

@@ -16,45 +16,37 @@
         <div class="row">
             <div class="col-2">
                 <div id="sidebar" class="sidebar">
-                    <a href="userHome">Home</a>
-                    <a href="addRecipe" class="active">Add Recipe</a>
+                    <a href="../userHome">Home</a>
+                    <a href="../addRecipe" class="active">Add Recipe</a>
                     <div class="notification">
-                        <a href="notifications">Notifications</a>
+                        <a href="../notifications">Notifications</a>
                         {% if unread_count > 0 %}
                         <span class="notification-badge">{{ unread_count }}</span>
                         {% else %}
                         <span class="notification-badge">0</span>
                         {% endif %}
                     </div>
-                    <a href="profile">Profile</a>
+                    <a href="../profile">Profile</a>
                 </div>
             </div>
-            <div class="col-10 addRec">
+            <div class="col-10 edit addRec">
                 <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-container">
                         <div class="form-group">
-                            <label for="name">Name of the dish</label>
-                            <input type="text" name="name" id="name">
+                            <label for="name">Name</label>
+                            <input type="text" name="name" id="name" value="{{user.first_name}}">
                         </div>
+                        <div class="form-group">
+                            <label for="name">Bio</label>
+                            <input type="text" name="bio" id="name" value="{{user.bio.bio}}">
+                        </div>
+                        <img src="{{user.bio.img.url}}" alt="" width="500px">
                         <div class="form-group">
                             <label for="img">Add Photo</label>
                             <input type="file" name="img" id="img">
                         </div>
-                        <div class="form-group">
-                            <label for="cuisine">Cuisine of the dish</label>
-                            <input type="text" name="cuisine" id="cuisine">
-                        </div>
-                        <div class="form-group">
-                            <label for="prep">Preparation time</label>
-                            <input type="number" name="prep" id="prep">
-                        </div>
-                        <div class="form-group">
-                            <label for="cook">Cooking time</label>
-                            <input type="number" name="cook" id="cook">
-                        </div>
-                            <input type="submit" class="btn btn-success" value="Add">
-                            
+                        <input type="submit" class="btn btn-success" value="Update">
                     </div>
                 </form>
                 

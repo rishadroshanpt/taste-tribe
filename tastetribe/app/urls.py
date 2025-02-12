@@ -26,6 +26,8 @@ urlpatterns=[
     path('save/<pid>',views.save),
     path('unsave/<pid>',views.unsave),
     path('saved',views.saved),
+    path('notifications',views.notifications_view),
+    path('editProfile',views.editProfile),
 
 
 ]
