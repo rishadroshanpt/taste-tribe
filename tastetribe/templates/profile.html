@@ -26,9 +26,9 @@
             <span class="notification-badge">0</span>
             {% endif %}
         </div>
-        <a href="profile"  class="active"><i class="fas fa-user"></i><span>Profile</span></a>
+        <a href="profile" class="active"><i class="fas fa-user"></i><span>Profile</span></a>
     </div>
-    
+
     <div class="container-fluid main">
         <div class="row user">
             <div class="col-5">
@@ -66,39 +66,44 @@
         </div>
         {% for i in dish %}
         <div class="row post">
-            <div class="col-lg-6">
-                <div class="first" id="like-section"
-                    style="display: flex; justify-content: space-between; align-items: center;">
-                    <h5 style="display: inline;">{{i.user.first_name}}</h5>
-                    <div class="dropdown" style="display: inline;">
-                        <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
-                            <i class="fa-solid fa-bars"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="edit/{{i.pk}}">Edit</a></li>
-                            <li><a class="dropdown-item" href="delete/{{i.pk}}">Delete</a></li>
-                        </ul>
+            <div class="col-lg-6 dish">
+                <div class="dishDet">
+                    <div class="first" id="like-section"
+                        style="display: flex; justify-content: space-between; align-items: center;">
+                        <h5 style="display: inline;">{{i.user.first_name}}</h5>
+                        <div class="dropdown" style="display: inline;">
+                            <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
+                                <i class="fa-solid fa-bars"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="edit/{{i.pk}}">Edit</a></li>
+                                <li><a class="dropdown-item" href="delete/{{i.pk}}">Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="{{i.img.url}}" alt="" width="100%">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        {% if i.pk in liked_dishes %}
+                        <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.pk }}"><i
+                                    class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
+                        {% else %}
+                        <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.pk }}"><i
+                                    class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
+                        {% endif %}
+                        <a href="feedbacks/{{i.pk}}" style="display: inline;">Feedbacks</a>
                     </div>
                 </div>
-                <img src="{{i.img.url}}" alt="" width="100%">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    {% if i.pk in liked_dishes %}
-                    <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.pk }}"><i
-                                class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
-                    {% else %}
-                    <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.pk }}"><i
-                                class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
-                    {% endif %}
-                    <a href="feedbacks/{{i.pk}}" style="display: inline;">Feedbacks</a>
+                <div class="dishDet dishDet2">
+                    <h4>Name of the dish : {{i.name}}</h4>
+                    <h4> Cuisine : {{i.cuisine}}</h4>
+                    <h4> Preperation time : {{i.prep}} minutes</h4>
+                    <h4> Cooking time : {{i.cook}} minutes</h4>
                 </div>
-                <h4>Name of the dish : {{i.name}}</h4>
-                <h4> Cuisine : {{i.cuisine}}</h4>
-                <h4> Preperation time : {{i.prep}} minutes</h4>
-                <h4> Cooking time : {{i.cook}} minutes</h4>
+                
             </div>
             <div class="col-lg-6">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         Ingredients :
                         {% for j in ingr %}
                         {% if i.pk == j.dish.pk %}
@@ -110,7 +115,7 @@
                         {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 col-md-6">
                         Cooking steps :
                         {% for j in cook %}
                         {% if i.pk == j.dish.pk %}

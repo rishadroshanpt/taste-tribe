@@ -29,11 +29,11 @@
         <a href="profile">Profile</a>
     </div>
     <div class="container-fluid main">
-        <div class="row">
-            {% for i in data %}
-            <div class="post row">
-                <div class="col-lg-6">
-                    <div class="first" id="like-section">
+        {% for i in data %}
+        <div class="post row">
+            <div class="col-lg-6 dish">
+                <div class="dishDet">
+                    <div class="first" id="like-section"  style="display: flex; justify-content: space-between; align-items: center;">
                         <h5 style="display: inline;"><a href="viewUser/{{i.dish.user.pk}}"
                                 class="viewUser">{{i.dish.user.first_name}}</a></h5>
                         <div class="dropdown" style="display: inline;">
@@ -46,8 +46,8 @@
                             </ul>
                         </div>
                     </div>
-                    <img src="{{i.dish.img.url}}" alt="" width="500px">
-                    <div>
+                    <img src="{{i.dish.img.url}}" alt="" width="100%">
+                    <div  style="display: flex; justify-content: space-between; align-items: center;">
                         {% if i.dish.pk in liked_dishes %}
                         <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.dish.pk }}"><i
                                     class="fa-solid fa-heart redheart"></i></a> {{ i.dish.likes }}</h4>
@@ -55,46 +55,47 @@
                         <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.dish.pk }}"><i
                                     class="fa-regular fa-heart normheart"></i></a> {{ i.dish.likes }}</h4>
                         {% endif %}
-                        <a href="rating/{{i.dish.pk}}" style="display: inline;">Ratings</a>
+                        <a href="feedbacks/{{i.dish.pk}}" style="display: inline;">Feedbacks</a>
                     </div>
-
+                </div>
+                <div class="dishDet dishDet2">
                     <h4>Name of the dish : {{i.dish.name}}</h4>
                     <h4> Cuisine : {{i.dish.cuisine}}</h4>
                     <h4> Preperation time : {{i.dish.prep}} minutes</h4>
                     <h4> Cooking time : {{i.dish.cook}} minutes</h4>
                 </div>
-                <div class="col-lg-6">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            Ingredients :
-                            {% for j in ingr %}
-                            {% if i.dish.pk == j.dish.pk %}
-                            <ul>
-                                <li>
-                                    <h6>{{j.item}}</h6>
-                                </li>
-                            </ul>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
-                        <div class="col-lg-6">
-                            Cooking steps :
-                            {% for j in cook %}
-                            {% if i.dish.pk == j.dish.pk %}
-                            <ul>
-                                <li>
-                                    <h6>{{j.steps}}</h6>
-                                </li>
-                            </ul>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        Ingredients :
+                        {% for j in ingr %}
+                        {% if i.dish.pk == j.dish.pk %}
+                        <ul>
+                            <li>
+                                <h6>{{j.item}}</h6>
+                            </li>
+                        </ul>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+                        Cooking steps :
+                        {% for j in cook %}
+                        {% if i.dish.pk == j.dish.pk %}
+                        <ul>
+                            <li>
+                                <h6>{{j.steps}}</h6>
+                            </li>
+                        </ul>
+                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
-
-            {% endfor %}
         </div>
+
+        {% endfor %}
     </div>
 
     <script src="{% static 'js/java.js' %}"></script>
