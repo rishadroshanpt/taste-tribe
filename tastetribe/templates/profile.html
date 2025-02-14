@@ -15,126 +15,118 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-2">
-                <div id="sidebar" class="sidebar">
-                    <a href="userHome">Home</a>
-                    <a href="addRecipe">Add Recipe</a>
-                    <div class="notification">
-                        <a href="notifications">Notifications</a>
-                        {% if unread_count > 0 %}
-                        <span class="notification-badge">{{ unread_count }}</span>
-                        {% else %}
-                        <span class="notification-badge">0</span>
-                        {% endif %}
-                    </div>
-
-                    <a href="profile" class="active">Profile</a>
+    <div id="sidebar" class="sidebar">
+        <a href="userHome"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="addRecipe"><i class="fas fa-plus"></i><span>Add Recipe</span></a>
+        <div class="notification">
+            <a href="notifications"><i class="fas fa-bell"></i><span>Notifications</span></a>
+            {% if unread_count > 0 %}
+            <span class="notification-badge">{{ unread_count }}</span>
+            {% else %}
+            <span class="notification-badge">0</span>
+            {% endif %}
+        </div>
+        <a href="profile"  class="active"><i class="fas fa-user"></i><span>Profile</span></a>
+    </div>
+    
+    <div class="container-fluid main">
+        <div class="row user">
+            <div class="col-5">
+                <h6>{{user.username}}</h6>
+                <img class="profilePic" src="{{user.bio.img.url}}" alt="">
+                <h6>{{user.first_name}}</h6>
+                <h6>{{user.bio.bio}}</h6>
+            </div>
+            <div class="col-5" style="display: flex; justify-content: space-between; align-items: center;">
+                <div class="det">
+                    <h4>{{post}}</h4>
+                    <h5>posts</h5>
+                </div>
+                <div class="det">
+                    <h4>{{followers}}</h4>
+                    <h5>Followers</h5>
+                </div>
+                <div class="det">
+                    <h4>{{following}}</h4>
+                    <h5>Following</h5>
                 </div>
             </div>
-            <div class="col-lg-10">
-                <div class="row user">
-                    <div class="col-5">
-                        <h6>{{user.username}}</h6>
-                        <img class="profilePic" src="{{user.bio.img.url}}" alt="">
-                        <h6>{{user.first_name}}</h6>
-                        <h6>{{user.bio.bio}}</h6>
-                    </div>
-                    <div class="col-5" style="display: flex; justify-content: space-between; align-items: center;">
-                        <div class="det">
-                            <h4>{{post}}</h4>
-                            <h5>posts</h5>
-                        </div>
-                        <div class="det">
-                            <h4>{{followers}}</h4>
-                            <h5>Followers</h5>
-                        </div>
-                        <div class="det">
-                            <h4>{{following}}</h4>
-                            <h5>Following</h5>
-                        </div>
-                    </div>
-                    <div class="col-2">
-                        <div class="dropdown" style="display: flex; justify-content: end;">
-                            <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
-                                <i class="fa-solid fa-bars"></i>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="saved">Saved</a></li>
-                                <li><a class="dropdown-item" href="editProfile">Edit Profile</a></li>
-                                <li><a class="dropdown-item" href="logout">Logout</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="row ">
-                    {% for i in dish %}
-                    <div class="row post">
-                        <div class="col-lg-6">
-                            <div class="first" id="like-section"
-                                style="display: flex; justify-content: space-between; align-items: center;">
-                                <h5 style="display: inline;">{{i.user.first_name}}</h5>
-                                <div class="dropdown" style="display: inline;">
-                                    <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
-                                        <i class="fa-solid fa-bars"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="edit/{{i.pk}}">Edit</a></li>
-                                        <li><a class="dropdown-item" href="delete/{{i.pk}}">Delete</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <img src="{{i.img.url}}" alt="" width="500px">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                {% if i.pk in liked_dishes %}
-                                <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.pk }}"><i
-                                            class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
-                                {% else %}
-                                <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.pk }}"><i
-                                            class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
-                                {% endif %}
-                                <a href="rating/{{i.pk}}" style="display: inline;">Ratings</a>
-                            </div>
-                            <h4>Name of the dish : {{i.name}}</h4>
-                            <h4> Cuisine : {{i.cuisine}}</h4>
-                            <h4> Preperation time : {{i.prep}} minutes</h4>
-                            <h4> Cooking time : {{i.cook}} minutes</h4>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    Ingredients :
-                                    {% for j in ingr %}
-                                    {% if i.pk == j.dish.pk %}
-                                    <ul>
-                                        <li>
-                                            <h6>{{j.item}}</h6>
-                                        </li>
-                                    </ul>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                                <div class="col-lg-6">
-                                    Cooking steps :
-                                    {% for j in cook %}
-                                    {% if i.pk == j.dish.pk %}
-                                    <ul>
-                                        <li>
-                                            <h6>{{j.steps}}</h6>
-                                        </li>
-                                    </ul>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {% endfor %}
+            <div class="col-2">
+                <div class="dropdown" style="display: flex; justify-content: end;">
+                    <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="saved">Saved</a></li>
+                        <li><a class="dropdown-item" href="editProfile">Edit Profile</a></li>
+                        <li><a class="dropdown-item" href="logout">Logout</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
+        {% for i in dish %}
+        <div class="row post">
+            <div class="col-lg-6">
+                <div class="first" id="like-section"
+                    style="display: flex; justify-content: space-between; align-items: center;">
+                    <h5 style="display: inline;">{{i.user.first_name}}</h5>
+                    <div class="dropdown" style="display: inline;">
+                        <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="edit/{{i.pk}}">Edit</a></li>
+                            <li><a class="dropdown-item" href="delete/{{i.pk}}">Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <img src="{{i.img.url}}" alt="" width="100%">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    {% if i.pk in liked_dishes %}
+                    <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.pk }}"><i
+                                class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
+                    {% else %}
+                    <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.pk }}"><i
+                                class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
+                    {% endif %}
+                    <a href="feedbacks/{{i.pk}}" style="display: inline;">Feedbacks</a>
+                </div>
+                <h4>Name of the dish : {{i.name}}</h4>
+                <h4> Cuisine : {{i.cuisine}}</h4>
+                <h4> Preperation time : {{i.prep}} minutes</h4>
+                <h4> Cooking time : {{i.cook}} minutes</h4>
+            </div>
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-6">
+                        Ingredients :
+                        {% for j in ingr %}
+                        {% if i.pk == j.dish.pk %}
+                        <ul>
+                            <li>
+                                <h6>{{j.item}}</h6>
+                            </li>
+                        </ul>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-lg-6">
+                        Cooking steps :
+                        {% for j in cook %}
+                        {% if i.pk == j.dish.pk %}
+                        <ul>
+                            <li>
+                                <h6>{{j.steps}}</h6>
+                            </li>
+                        </ul>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
     </div>
 
     <script src="{% static 'js/java.js' %}"></script>

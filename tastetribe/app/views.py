@@ -160,6 +160,14 @@ def addRecipe(req):
     else:
         return redirect(shop_login)
     
+def delete(req,pid):
+    if 'user' in req.session:
+        data=Dish.objects.get(pk=pid)
+        data.delete()
+        return redirect(profile)
+    else:
+        return redirect(shop_login)
+    
 def ingredients(req,pid):
     if 'user' in req.session:
         if req.method=='POST':
@@ -289,7 +297,7 @@ def removeLike(req,pid):
         return redirect(shop_login)
     
 
-def rating(req,pid):
+def feedbacks(req,pid):
     if 'user' in req.session:
         user=User.objects.get(username=req.session['user'])
         dish=Dish.objects.get(pk=pid)
@@ -297,7 +305,7 @@ def rating(req,pid):
             rate=req.POST['rating']
             data=Ratings.objects.create(user=user,dish=dish,ratings=rate)
             data.save()
-            return redirect('rating',pid=pid)
+            return redirect('feedbacks',pid=pid)
         else:
             data=Ratings.objects.filter(dish=pid)
             ingr=Ingredients.objects.filter(dish=pid)

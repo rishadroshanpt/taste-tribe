@@ -15,89 +15,85 @@
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div id="sidebar" class="sidebar">
+        <a href="userHome">Home</a>
+        <a href="addRecipe">Add Recipe</a>
+        <div class="notification">
+            <a href="notifications">Notifications</a>
+            {% if unread_count > 0 %}
+            <span class="notification-badge">{{ unread_count }}</span>
+            {% else %}
+            <span class="notification-badge">0</span>
+            {% endif %}
+        </div>
+        <a href="profile">Profile</a>
+    </div>
+    <div class="container-fluid main">
         <div class="row">
-            <div class="col-lg-2">
-                <div id="sidebar" class="sidebar">
-                    <a href="userHome">Home</a>
-                    <a href="addRecipe">Add Recipe</a>
-                    <div class="notification">
-                        <a href="notifications">Notifications</a>
-                        {% if unread_count > 0 %}
-                        <span class="notification-badge">{{ unread_count }}</span>
+            {% for i in data %}
+            <div class="post row">
+                <div class="col-lg-6">
+                    <div class="first" id="like-section">
+                        <h5 style="display: inline;"><a href="viewUser/{{i.dish.user.pk}}"
+                                class="viewUser">{{i.dish.user.first_name}}</a></h5>
+                        <div class="dropdown" style="display: inline;">
+                            <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
+                                <i class="fa-solid fa-bars"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="report/{{i.dish.pk}}">Report</a></li>
+                                <li><a class="dropdown-item" href="unsave/{{i.dish.pk}}">Unsave</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <img src="{{i.dish.img.url}}" alt="" width="500px">
+                    <div>
+                        {% if i.dish.pk in liked_dishes %}
+                        <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.dish.pk }}"><i
+                                    class="fa-solid fa-heart redheart"></i></a> {{ i.dish.likes }}</h4>
                         {% else %}
-                        <span class="notification-badge">0</span>
+                        <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.dish.pk }}"><i
+                                    class="fa-regular fa-heart normheart"></i></a> {{ i.dish.likes }}</h4>
                         {% endif %}
-                    </div>
-                    <a href="profile">Profile</a>
-                    <!-- <a href="logout">Logout</a> -->
-                </div>
-            </div>
-            <div class="col-lg-10">
-                <div class="row">
-                    {% for i in data %}
-                    <div class="post row">
-                        <div class="col-lg-6">
-                            <div class="first" id="like-section">
-                                <h5 style="display: inline;"><a href="viewUser/{{i.dish.user.pk}}" class="viewUser">{{i.dish.user.first_name}}</a></h5>
-                                <div class="dropdown" style="display: inline;">
-                                    <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
-                                        <i class="fa-solid fa-bars"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item" href="report/{{i.dish.pk}}">Report</a></li>
-                                      <li><a class="dropdown-item" href="unsave/{{i.dish.pk}}">Unsave</a></li>
-                                    </ul>
-                                  </div> 
-                            </div>
-                            <img src="{{i.dish.img.url}}" alt="" width="500px">
-                            <div>
-                                {% if i.dish.pk in liked_dishes %}
-                                <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.dish.pk }}"><i class="fa-solid fa-heart redheart"></i></a> {{ i.dish.likes }}</h4>
-                                {% else %}
-                                <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.dish.pk }}"><i class="fa-regular fa-heart normheart"></i></a> {{ i.dish.likes }}</h4>
-                                {% endif %}
-                                <a href="rating/{{i.dish.pk}}" style="display: inline;">Ratings</a>
-                            </div>
-
-                            <h4>Name of the dish : {{i.dish.name}}</h4>
-                            <h4> Cuisine : {{i.dish.cuisine}}</h4>
-                            <h4> Preperation time : {{i.dish.prep}} minutes</h4>
-                            <h4> Cooking time : {{i.dish.cook}} minutes</h4>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    Ingredients :
-                                    {% for j in ingr %}
-                                    {% if i.dish.pk == j.dish.pk %}
-                                    <ul>
-                                        <li>
-                                            <h6>{{j.item}}</h6>
-                                        </li>
-                                    </ul>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                                <div class="col-lg-6">
-                                    Cooking steps :
-                                    {% for j in cook %}
-                                    {% if i.dish.pk == j.dish.pk %}
-                                    <ul>
-                                        <li>
-                                            <h6>{{j.steps}}</h6>
-                                        </li>
-                                    </ul>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
+                        <a href="rating/{{i.dish.pk}}" style="display: inline;">Ratings</a>
                     </div>
 
-                    {% endfor %}
+                    <h4>Name of the dish : {{i.dish.name}}</h4>
+                    <h4> Cuisine : {{i.dish.cuisine}}</h4>
+                    <h4> Preperation time : {{i.dish.prep}} minutes</h4>
+                    <h4> Cooking time : {{i.dish.cook}} minutes</h4>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            Ingredients :
+                            {% for j in ingr %}
+                            {% if i.dish.pk == j.dish.pk %}
+                            <ul>
+                                <li>
+                                    <h6>{{j.item}}</h6>
+                                </li>
+                            </ul>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="col-lg-6">
+                            Cooking steps :
+                            {% for j in cook %}
+                            {% if i.dish.pk == j.dish.pk %}
+                            <ul>
+                                <li>
+                                    <h6>{{j.steps}}</h6>
+                                </li>
+                            </ul>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            {% endfor %}
         </div>
     </div>
 

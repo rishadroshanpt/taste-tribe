@@ -15,24 +15,22 @@
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div id="sidebar" class="sidebar">
+        <a href="userHome">Home</a>
+        <a href="addRecipe">Add Recipe</a>
+        <div class="notification">
+            <a href="notifications" class="active">Notifications</a>
+            {% if unread_count > 0 %}
+            <span class="notification-badge">{{ unread_count }}</span>
+            {% else %}
+            <span class="notification-badge">0</span>
+            {% endif %}
+        </div>
+        <a href="profile">Profile</a>
+    </div>
+    <div class="container-fluid main">
         <div class="row">
-            <div class="col-lg-2">
-                <div id="sidebar" class="sidebar">
-                    <a href="userHome">Home</a>
-                    <a href="addRecipe">Add Recipe</a>
-                    <div class="notification">
-                        <a href="notifications" class="active">Notifications</a>
-                        {% if unread_count > 0 %}
-                        <span class="notification-badge">{{ unread_count }}</span>
-                        {% else %}
-                        <span class="notification-badge">0</span>
-                        {% endif %}
-                    </div>
-                    <a href="profile">Profile</a>
-                </div>
-            </div>
-            <div class="col-lg-10">
+            <div>
                 <ul>
                     {% for notification in notifications %}
                         <li>

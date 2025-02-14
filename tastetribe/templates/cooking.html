@@ -12,26 +12,24 @@
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div id="sidebar" class="sidebar">
+        <a href="../userHome">Home</a>
+        <a href="../addRecipe" class="active">Add Recipe</a>
+        <div class="notification">
+            <a href="../notifications">Notifications</a>
+            {% if unread_count > 0 %}
+            <span class="notification-badge">{{ unread_count }}</span>
+            {% else %}
+            <span class="notification-badge">0</span>
+            {% endif %}
+        </div>
+        <a href="../profile">Profile</a>
+    </div>
+    <div class="container-fluid main">
         <div class="row">
-            <div class="col-2">
-                    <div id="sidebar" class="sidebar">
-                        <a href="../userHome">Home</a>
-                        <a href="../addRecipe" class="active">Add Recipe</a>
-                        <div class="notification">
-                            <a href="../notifications">Notifications</a>
-                            {% if unread_count > 0 %}
-                            <span class="notification-badge">{{ unread_count }}</span>
-                            {% else %}
-                            <span class="notification-badge">0</span>
-                            {% endif %}
-                        </div>
-                        <a href="../profile">Profile</a>
-                    </div>
-                
-            </div>
-            <div class="col-10 addRec">
-                <a href="../ingredients/{{dish.pk}}" class="btn btn-dark cooking">Ingredients</a>
+            <div class="addRec">
+                <a href="../ingredients/{{dish.pk}}" class="btn btn-outline-dark cooking">Ingredients</a>
+                <a href="../userHome" class="btn btn-dark done">Done</a>
                 <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-container">
@@ -49,8 +47,8 @@
                         <div class="items">
                             <h5>{{i.steps}}</h5>
                             <div class="bb">
-                                <a href="../editCook/{{i.pk}}" class="btn btn-primary">Edit</a>
-                                <a href="../deleteCook/{{i.pk}}" class="btn btn-danger">Delete</a>
+                                <a href="../editCook/{{i.pk}}" class="btn btn-outline-primary">Edit</a>
+                                <a href="../deleteCook/{{i.pk}}" class="btn btn-outline-danger">Delete</a>
                             </div>
                         </div>
                     </div>

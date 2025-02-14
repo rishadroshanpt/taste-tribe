@@ -78,14 +78,21 @@ body{
 
 .addRec .items{
     background-color: #ddd;
+    color: black;
     border-radius: 15px;
     padding: 20px;
+    margin: 10px;
     display: flex;
     justify-content: space-between;
 }
-.addRec .cooking{
+.addRec .done{
     position: fixed;
     right: 10px;
+    top: 10px;
+}
+.addRec .cooking{
+    position: fixed;
+    right: 80px;
     top: 10px;
 }
 
@@ -93,17 +100,20 @@ body{
     display: flex;
     justify-content: space-between;
 }
+.main{
+    padding-left: 250px;
+}
 .post{
     border-bottom: 1px solid white;
-    padding: 50px;
-   
+    padding: 40px; 
+    margin: 0; 
 }
 .post .img{
     display: flex;
     align-items: center;
+    width: 100%;
 }
 .redheart{
-    /* color: red; */
     color: red;
 }
 .normheart{
@@ -137,6 +147,7 @@ body{
 }
 .user{
     background-color: #a6a4a4;
+    margin: 0;
 }
 .user .col-5{
     padding: 10px 50px;
@@ -220,39 +231,71 @@ body{
 
 
 
-/* Media query for screens less than 500px */
-@media screen and (max-width: 500px) {
+/* Media query for screens less than 900px */
+@media screen and (max-width: 990px) {
     /* Position the sidebar at the bottom */
     .sidebar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
+        height: 50px; /* Adjust the height as needed */
         width: 100%;
-        height: 50px;
-        padding-top: 10px;
+        position: fixed;
+        top :auto;
+        bottom: 0; /* Position the sidebar at the bottom */
+        left: 0;
+        background-color: #111;
+        transition: 0.3s;
+        z-index: 1;
         display: flex;
-        justify-content: space-around;
-        align-items: center;
+        flex-direction: row; /* Align items horizontally */
+        justify-content: space-evenly; /* Distribute space evenly across the sidebar */
+    }
+    
+    .sidebar a {
+        font-size: 24px; /* Make icons larger */
+        padding: 10px;
+        text-align: center;
     }
 
-    /* Adjust the links to be horizontally arranged */
-    .sidebar a {
-        font-size: 16px;
+    .sidebar a i {
+        display: inline-block;
+        font-size: 24px; /* Ensure the icons are large enough */
+    }
+
+    .sidebar a span {
+        display: none; /* Hide text on small screens */
+    }
+    
+    .sidebar .active {
+        color: white;
+        font-weight: 700;
+    }
+    
+    .sidebar a:hover {
         color: #f1f1f1;
     }
-
-    /* Remove left margin from the main content */
-    #main-content {
-        margin-left: 0;
+    .main{
+        padding: 0;
     }
+    .dish{
+        display: flex;
+    }
+    .dishDet{
+        display: inline;
+        width: 50%;
+        padding: 1rem;
+    }
+    
 }
 
 /* Styles for larger screens */
 @media screen and (min-width: 501px) {
-    /* Ensure sidebar is fixed on the left */
-    #sidebar {
-        left: 0;
+    .sidebar a i {
+        display: none; /* Hide icons on larger screens */
     }
+
+    .sidebar a span {
+        display: inline; /* Show text on larger screens */
+    }
+    
 
     /* Adjust the main content left margin */
     #main-content {
