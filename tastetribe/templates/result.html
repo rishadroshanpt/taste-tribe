@@ -17,82 +17,50 @@
 
 <body>
     {% csrf_token %}
-    <div class="container-fluid main">
+    <div class="container-fluid">
         <ul id="searchResults">
-            {% for i in dish %}
-            <div class="post row">
-                <div class="col-lg-6 dish">
-                    <div class="dishDet">
-                        <div class="first" id="like-section"
-                            style="display: flex; justify-content: space-between; align-items: center;">
-                            <h5 style="display: inline;"><a href="viewUser/{{i.user.pk}}"
-                                    class="viewUser">{{i.user.first_name}}</a></h5>
-                            <div class="dropdown" style="display: inline;">
-                                <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
-                                    <i class="fa-solid fa-bars"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="report/{{i.pk}}">Report</a></li>
-                                    {% if i.pk in saved_dishes %}
-                                    <li><a class="dropdown-item" href="unsave/{{i.pk}}">Unsave</a></li>
-                                    {% else %}
-                                    <li><a class="dropdown-item" href="save/{{i.pk}}">Save</a></li>
-                                    {% endif %}
-                                </ul>
+            <div class="searchRes">
+                <div class="row">
+                    <div class="col-6 dishes">
+                        <h2>Dishes</h2>
+                        {% if dish %}
+                        {% for i in dish %}
+                        <a href="dish/{{i.pk}}">
+                            <div class="dish-item">
+                                <img src="{{i.img.url}}" alt="" class="profilePic">
+                                <div class="dish-info">
+                                    <h4>{{i.name}}</h4>
+                                    <h6>Cuisine: {{i.cuisine}}</h6>
+                                </div>
                             </div>
-                        </div>
-                        <img src="{{i.img.url}}" alt="" class="dishImg" width="100%">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <h4 style="display: inline;">
-                                <a class="like-button" href="javascript:void(0);" data-dish-id="{{ i.pk }}" id="like-btn-{{ i.pk }}">
-                                    <i class="fa-solid fa-heart redheart"></i>
-                                </a>
-                                <span id="like-count-{{ i.pk }}">{{ i.likes }}</span>
-                            </h4>
-
-                            <a href="feedbacks/{{i.pk}}" style="display: inline;">Feedbacks</a>
-                        </div>
+                        </a>
+                        {% endfor %}
+                        {% else %}
+                        <h3>No result found !!!</h3>
+                        {% endif %}
                     </div>
 
-                    <div class="dishDet dishDet2">
-                        <h4>Name of the dish : {{i.name}}</h4>
-                        <h4> Cuisine : {{i.cuisine}}</h4>
-                        <h4> Preperation time : {{i.prep}} minutes</h4>
-                        <h4> Cooking time : {{i.cook}} minutes</h4>
+                    <div class="col-6 users">
+                        <h2>Users</h2>
+                        {% if users %}
+                        {% for i in users %}
+                        <a href="viewUser/{{i.pk}}">
+                            <div class="user-item">
+                                <img src="{{i.bio.img.url}}" alt="" class="profilePic">
+                                <div class="user-info">
+                                    <h4>{{i.first_name}}</h4>
+                                </div>
+                            </div>
+                        </a>
+
+                        {% endfor %}
+                        {% else %}
+                        <h3>No result found !!!</h3>
+                        {% endif %}
                     </div>
                 </div>
-                <div class="col-lg-6 dishDet3">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6">
-                            Ingredients :
-                            {% for j in ingr %}
-                            {% if i.pk == j.dish.pk %}
-                            <ul>
-                                <li>
-                                    <h6>{{j.item}}</h6>
-                                </li>
-                            </ul>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
-                        <div class="col-lg-6 col-md-6">
-                            Cooking steps :
-                            {% for j in cook %}
-                            {% if i.pk == j.dish.pk %}
-                            <ul>
-                                <li>
-                                    <h6>{{j.steps}}</h6>
-                                </li>
-                            </ul>
-                            {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                <button class="toggleBtn">See more ...</button>
             </div>
 
-            {% endfor %}
         </ul>
     </div>
 

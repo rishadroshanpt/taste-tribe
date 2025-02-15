@@ -61,12 +61,13 @@
                             </div>
                             <img src="{{i.img.url}}" alt="" class="dishImg" width="100%">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <h4 style="display: inline;">
-                                    <a class="like-button" href="javascript:void(0);" data-dish-id="{{ dish.pk }}">
-                                        <i class="fa-regular fa-heart" id="like-icon-{{ dish.pk }}"></i>
-                                    </a>
-                                    <span id="like-count-{{ dish.pk }}">{{ dish.likes }}</span>
-                                </h4>
+                                {% if i.pk in liked_dishes %}
+                                <h4 style="display: inline;"><a class="like-button" href="../removeLike/{{ i.pk }}"><i
+                                            class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
+                                {% else %}
+                                <h4 style="display: inline;"><a class="like-button" href="../addLike/{{ i.pk }}"><i
+                                            class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
+                                {% endif %}
                                 <a href="feedbacks/{{i.pk}}" style="display: inline;">Feedbacks</a>
                             </div>
                         </div>
@@ -84,7 +85,7 @@
                                 Ingredients :
                                 {% for j in ingr %}
                                 {% if i.pk == j.dish.pk %}
-                                <ul>
+                                <ul style="list-style-type: disc;">
                                     <li>
                                         <h6>{{j.item}}</h6>
                                     </li>
@@ -96,7 +97,7 @@
                                 Cooking steps :
                                 {% for j in cook %}
                                 {% if i.pk == j.dish.pk %}
-                                <ul>
+                                <ul style="list-style-type: disc;">
                                     <li>
                                         <h6>{{j.steps}}</h6>
                                     </li>

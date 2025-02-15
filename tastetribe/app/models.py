@@ -14,6 +14,9 @@ class Dish(models.Model):
 class Like(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     dish=models.ForeignKey(Dish, on_delete=models.CASCADE)
+    
+    class Meta:
+        unique_together = ('user', 'dish')
 
 class Ratings(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)

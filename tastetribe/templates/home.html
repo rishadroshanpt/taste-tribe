@@ -4,6 +4,7 @@
 <head>
     {% load static %}
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{% csrf_token %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link class="tab" rel="icon" href="{% static 'images/Taste Tribe.png' %}" type="image/x-icon">
     <title>Taste Tribe</title>
@@ -16,7 +17,6 @@
 </head>
 
 <body>
-
     <div id="sidebar" class="sidebar">
         <a href="#" class="active"><i class="fas fa-home"></i><span>Home</span></a>
         <a href="explore"><i class="fa-solid fa-magnifying-glass"></i><span>Explore</span></a>
@@ -56,10 +56,10 @@
                     <img src="{{i.img.url}}" alt="" class="dishImg" width="100%">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         {% if i.pk in liked_dishes %}
-                        <h4 style="display: inline;"><a class="like-button" href="removeLike/{{ i.pk }}"><i
+                        <h4 style="display: inline;"><a class="like-button" href="../removeLike/{{ i.pk }}"><i
                                     class="fa-solid fa-heart redheart"></i></a> {{ i.likes }}</h4>
                         {% else %}
-                        <h4 style="display: inline;"><a class="like-button" href="addLike/{{ i.pk }}"><i
+                        <h4 style="display: inline;"><a class="like-button" href="../addLike/{{ i.pk }}"><i
                                     class="fa-regular fa-heart normheart"></i></a> {{ i.likes }}</h4>
                         {% endif %}
                         <a href="feedbacks/{{i.pk}}" style="display: inline;">Feedbacks</a>

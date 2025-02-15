@@ -18,17 +18,32 @@ from django.db.models import Q
 def shop_login(req):
     if 'user' in req.session:
         return redirect(home)
-    if req.method=='POST':
-        uname=req.POST['uname']
-        password=req.POST['passwd']
-        data=authenticate(username=uname,password=password)
-        if data:
+    if req.method == 'POST':
+        if 'uname' in req.POST and 'passwd' in req.POST:
+            uname = req.POST['uname']
+            password = req.POST['passwd']
+            data = authenticate(username=uname, password=password)
+            if data:
                 req.session['user']=uname   #create session
                 return redirect(userHome)
+            else:
+                messages.warning(req,'Invalid username or password.')
+                return redirect(shop_login)
+        elif 'name' in req.POST and 'email' in req.POST and 'passwd' in req.POST:
+            # This is for sign-up
+            name = req.POST['name']
+            email = req.POST['email']
+            password = req.POST['passwd']
+            otp=OTP(req)
+            if User.objects.filter(email=email).exists():
+                messages.error(req, "Email is already in use.")
+                return redirect(shop_login)
+            else:
+                send_mail('Your registration OTP ,',f"OTP for registration is {otp}", settings.EMAIL_HOST_USER, [email])
+                messages.success(req, "Registration successful. Please check your email for OTP.")
+                return redirect("validate",name=name,password=password,email=email,otp=otp)    
         else:
-            messages.warning(req,'Invalid username or password.')
             return redirect(shop_login)
-    
     else:
         return render(req,'login.html')
     
@@ -106,16 +121,7 @@ def userHome(req):
     
 def explore(req):
     if 'user' in req.session:
-        # query = req.GET.get('q', '') 
         user=User.objects.get(username=req.session['user'])
-        # if query:
-        # # Search across dish name, cuisine, and user (case-insensitive search)
-        #     dish = Dish.objects.filter(
-        #         Q(name__icontains=query) |
-        #         Q(cuisine__icontains=query) |
-        #         Q(user__first_name__icontains=query)  # Searching for user's first name
-        #     )[: : -1]
-        # else:
         dish=Dish.objects.all()[: : -1]
         ingr=Ingredients.objects.all()
         cook=Cooking.objects.all()
@@ -132,34 +138,21 @@ def explore(req):
 
 def search_dishes(req):
     query = req.GET.get('q', '')  # Get the search query from the request
-    user=User.objects.get(username=req.session['user'])
   # Assuming you are using the logged-in user
-
+    dishes=[]
+    users=[]
     if query:
         # Search across dish name, cuisine, and user (case-insensitive search)
-        dishes = Dish.objects.filter(
-            Q(name__icontains=query) |
-            Q(cuisine__icontains=query) |
-            Q(user__first_name__icontains=query)  # Searching for user's first name
-        )
-    else:
-        dishes = Dish.objects.all()  # If no query, return all dishes
-
-    # Fetch liked and saved dishes for the current user
-    liked_dishes = [like.dish.pk for like in Like.objects.filter(user=user)]
-    saved_dishes = [save.dish.pk for save in Saved.objects.filter(user=user)]
-    
-    ingr = Ingredients.objects.all()
-    cook = Cooking.objects.all()
-
-    # Return the HTML fragment with the search results
+        dishes = Dish.objects.filter(Q(name__icontains=query) | Q(cuisine__icontains=query))
+        users = User.objects.filter(Q(first_name__icontains=query))
     return render(req, 'result.html', {
         'dish': dishes,
-        'liked_dishes': liked_dishes,
-        'saved_dishes': saved_dishes,
-        'ingr': ingr,
-        'cook': cook,
+        'users': users,
     })
+
+
+    # Return the HTML fragment with the search results
+
 
     
 def profile(req):
@@ -332,27 +325,30 @@ def deleteCook(req,pid):
     else:
         return redirect(shop_login)
     
-def add_like(req,pid):
+def like(req,pid):
     if 'user' in req.session:
         dish = Dish.objects.get(pk=pid)
         user = User.objects.get(username=req.session['user'])
-
-        like, created = Like.objects.get_or_create(user=user, dish=dish)
-
-        if not created:
-            like.delete()
+    # Check if the user has already liked the dish
+        existing_like = Like.objects.filter(user=user, dish=dish).first()
+    
+        if existing_like:
+            # Unlike the dish
+            existing_like.delete()
+            dish.likes -= 1
+            dish.save()
             liked = False
         else:
+            # Like the dish
+            Like.objects.create(user=user, dish=dish)
+            dish.likes += 1
+            dish.save()
             liked = True
-
-        dish.likes = Like.objects.filter(dish=dish).count()
-        dish.save()
 
         return JsonResponse({
             'liked': liked,
-            'likes_count': dish.likes,
+            'like_count': dish.likes
         })
-
     else:
         return redirect(shop_login)
     

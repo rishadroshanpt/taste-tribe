@@ -1,3 +1,19 @@
+console.log("Script loaded successfully");
+
+const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const container = document.getElementById('container');
+
+signUpButton.addEventListener('click', () => {
+	container.classList.add("right-panel-active");
+});
+
+signInButton.addEventListener('click', () => {
+	container.classList.remove("right-panel-active");
+});
+
+
+
 let passwd = document.getElementById("pass")
 let len = document.getElementById("len")
 let cap = document.getElementById("cap")
@@ -26,3 +42,5 @@ document.getElementById("registerForm").addEventListener('submit', function (eve
         // Add the message container to the form or any section on the page
         document.body.appendChild(messageContainer);    }
 });
+
+
