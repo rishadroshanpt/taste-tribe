@@ -5,6 +5,7 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link class="tab" rel="icon" href="{% static 'images/Taste Tribe.png' %}" type="image/x-icon">
     <title>Taste Tribe</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
@@ -17,6 +18,7 @@
 <body>
 
     <div id="sidebar" class="sidebar">
+        <!-- <a href="#" class="logo"><i><img src="{% static 'images/Taste Tribe.png' %}" alt=""></i><span><img src="{% static 'images/Taste Tribe.png' %}" alt=""></span></a> -->
         <a href="#" class="active"><i class="fas fa-home"></i><span>Home</span></a>
         <a href="addRecipe"><i class="fas fa-plus"></i><span>Add Recipe</span></a>
         <div class="notification">
@@ -24,7 +26,6 @@
             {% if unread_count > 0 %}
             <span class="notification-badge">{{ unread_count }}</span>
             {% else %}
-            <span class="notification-badge">0</span>
             {% endif %}
         </div>
         <a href="profile"><i class="fas fa-user"></i><span>Profile</span></a>
@@ -72,7 +73,7 @@
                     <h4> Cooking time : {{i.cook}} minutes</h4>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 dishDet3">
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
                         Ingredients :
@@ -100,6 +101,7 @@
                     </div>
                 </div>
             </div>
+            <button class="toggleBtn">See more ...</button>
         </div>
 
         {% endfor %}

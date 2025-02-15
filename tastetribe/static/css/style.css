@@ -4,6 +4,14 @@ body{
     color: white;
     font-family: 'Rokkitt';
 }
+.logo img{
+    width: 200px;
+    mix-blend-mode: difference;
+}
+.tab{
+    mix-blend-mode: difference;
+    border-radius: 50%;
+}
 .sidebar {
     height: 100%;
     width: 250px;
@@ -13,7 +21,7 @@ body{
     background-color: #111;
     /* padding-top: 60px; */
     transition: 0.3s;
-    z-index: 1;
+    z-index: 10;
     display: flex;
     flex-direction: column;
     justify-content:space-evenly;
@@ -36,14 +44,12 @@ body{
 .sidebar a:hover {
     color: #f1f1f1;
 }
-
-/* Main content styles */
-#main-content {
-    transition: margin-left .5s;
-    padding: 20px;
-    margin-left: 250px;
+.addRec{
+    padding: 0;
 }
-
+.addRec form{
+    margin: 0;
+}
 .addRec .form-container {
     width: 100%;
     max-width: 600px; /* Max width for better readability */
@@ -57,7 +63,10 @@ body{
 .addRec .form-group {
     margin-bottom: 15px;
 }
-
+.addRec .userDone{
+    width: 100%;
+    margin: 10px 0;
+}
 .addRec label {
     display: block;
     color: white;
@@ -96,7 +105,10 @@ body{
     right: 80px;
     top: 10px;
 }
-
+.addRecForm{
+    padding: 40px; 
+    margin: 0; 
+}
 .edit .space{
     display: flex;
     justify-content: space-between;
@@ -104,6 +116,7 @@ body{
 .main{
     padding: 0;
     padding-left: 250px;
+    margin-bottom: 50px;
 }
 .post{
     border-bottom: 1px solid white;
@@ -131,6 +144,7 @@ body{
     justify-content: space-between;
 }
 .rating{
+    margin: 0;
     margin-top: 50px;
 }
 .ratings{
@@ -154,6 +168,9 @@ body{
 .user .col-5{
     padding: 10px 50px;
 }
+.user h4{
+    text-align: center;
+}
 /* Sidebar container */
 .notification{
     position: relative;
@@ -176,9 +193,23 @@ body{
     object-fit: cover;
     border-radius: 50%;
 }
-
-
-
+.dishDet3{
+    margin-top: 3vh;
+}
+.notifications ul li{
+    list-style-type: none;
+    padding: 20px;
+}
+.toggleBtn{
+    display: none;
+}
+.dropdown-menu{
+    background-color: #818181;
+    border-radius: 0px;
+}
+.dropdown-menu .dropdown-item{
+    color: white;
+}
 
 
 
@@ -245,17 +276,11 @@ body{
         left: 0;
         background-color: #111;
         transition: 0.3s;
-        z-index: 1;
         display: flex;
         flex-direction: row; /* Align items horizontally */
         justify-content: space-evenly; /* Distribute space evenly across the sidebar */
     }
     
-    .sidebar a {
-        font-size: 24px; /* Make icons larger */
-        padding: 10px;
-        text-align: center;
-    }
 
     .sidebar a i {
         display: inline-block;
@@ -293,11 +318,178 @@ body{
         font-size: 8px;
         right: 0px; /* Adjust as necessary */
     }
-    
+    .addRec .items{
+        border-radius: 10px;
+        padding: 10px;
+    }
+    .addRec .items h5{
+        font-size: 3vw;
+    }
+    .addRec .done{
+        position: fixed;
+        right: 10px;
+        top: 10px;
+    }
+    .addRec .cooking{
+        position: fixed;
+        right: 80px;
+        top: 10px;
+    }
+    .dishDet a{
+        font-size: 2vw;
+    }
+    .dishDet h4{
+        font-size: 3vw;
+    }
+    .notifications {
+        font-size: 1.5vw;
+    }
+    .rating h4{
+        font-size: 3vw;
+    }
+    .rate p, .rate h5{
+        font-size: 2vw;
+    }
+    .edit .space .btn{
+        width: 30vw;
+        font-size: 3vw;
+    }
+    .cooking{
+        width: 15vw;
+        font-size: 1.5vw;
+    }
+    .bb .btn ,.done{
+        width: 7vw;
+        font-size: 1.5vw;
+    }
+
 }
+
+
+
+@media screen and (max-width: 790px) {
+.dishDet3{
+    display: none;
+}
+.toggleBtn{
+    display: block;
+    all: unset;
+    padding-left: 4vw;
+    font-size: 2vw;
+}
+.post{
+    padding: 0;
+}
+.user .col5-2{
+    padding: 10px 0;
+}
+.user h6{
+    font-size: 2vw;
+}
+.user h4 , .user h5{
+    font-size: 2.5vw;
+}
+.profilePic{
+    width: 40px;
+    height: 40px;
+}
+.follow{
+    width: 15vw;
+    font-size: 2vw;
+    position: relative;
+    left: 30vw;
+}
+}
+
+
+@media screen and (max-width: 490px) {
+.sidebar{
+    height: 40px;
+}
+.sidebar a{
+    padding: 5px;
+}
+.sidebar a i{
+    display: inline-block;
+    font-size: 15px;
+}
+.main{
+    margin-bottom: 40px;
+}
+.addRec input[type="text"],
+.addRec input[type="file"],
+.addRec input[type="number"],
+.addRec input[type="submit"] {
+    padding: 4px;
+}
+.post{
+    padding: 0;
+}
+.dish{
+    display: block;
+}
+.dishDet a{
+    font-size: 3vw;
+}
+.dishDet h4, .dishDet h5{
+    font-size: 4vw;
+}
+.dishDet3{
+    margin-top: 0;
+}
+.col-md-6, .col-md-6 h6{
+    font-size: 3vw;
+}
+.toggleBtn{
+    padding-left: 3vw;
+    font-size: 3vw;
+}
+.notifications ul li{
+    padding: 10px;
+}
+.notifications {
+    font-size: 2.5vw;
+}
+.user .col-5{
+    padding: 10px 10px;
+}
+.user a{
+    font-size: 2vw;
+}
+.rating h4{
+    font-size: 4vw;
+}
+.rate p, .rate h5{
+    font-size: 3vw;
+}
+.edit .space .btn{
+    width: 30vw;
+    font-size: 3vw;
+}
+.cooking{
+    width: 20vw;
+    font-size: 2vw;
+}
+.bb .btn ,.done{
+    width: 10vw;
+    font-size: 2vw;
+}
+.addRec .items h5{
+    font-size: 4vw;
+}
+}
+
 
 /* Styles for larger screens */
 @media screen and (min-width: 501px) {
+    .sidebar a i {
+        display: inline-block;
+        font-size: 24px; /* Ensure the icons are large enough */
+    }
+
+    .sidebar a span {
+        display: none; /* Hide text on small screens */
+    }
     .sidebar a i {
         display: none; /* Hide icons on larger screens */
     }
@@ -307,8 +499,5 @@ body{
     }
     
 
-    /* Adjust the main content left margin */
-    #main-content {
-        margin-left: 250px;
-    }
+
 }

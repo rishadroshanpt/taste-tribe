@@ -16,36 +16,35 @@
 
 <body>
     <div id="sidebar" class="sidebar">
-        <a href="userHome">Home</a>
-        <a href="addRecipe">Add Recipe</a>
+        <a href="userHome"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="addRecipe"><i class="fas fa-plus"></i><span>Add Recipe</span></a>
         <div class="notification">
-            <a href="notifications" class="active">Notifications</a>
+            <a href="notifications" class="active"><i class="fas fa-bell"></i><span>Notifications</span></a>
             {% if unread_count > 0 %}
             <span class="notification-badge">{{ unread_count }}</span>
             {% else %}
-            <span class="notification-badge">0</span>
             {% endif %}
         </div>
-        <a href="profile">Profile</a>
+        <a href="profile"><i class="fas fa-user"></i><span>Profile</span></a>
     </div>
-    <div class="container-fluid main">
-        <div class="row">
-            <div>
-                <ul>
-                    {% for notification in notifications %}
-                        <li>
-                                {% if not notification.read %}
-                                    <strong>{{ notification.message }}</strong>
-                                {% else %}
-                                    {{ notification.message }}
-                                {% endif %}
-                            </a>
-                        </li>
-                    {% empty %}
-                        <p>No new notifications</p>
-                    {% endfor %}
-                </ul>
-            </div>
+    <div class="notifications main">
+            <ul>
+                {% for notification in notifications %}
+                <li>
+                    {% if not notification.read %}
+                    <a href="viewUser/{{notification.user.pk}}"><strong>{{ notification.user.username }}</strong></a>
+                    <p>{{ notification.message}}</p>
+                    {% else %}
+                    <a href="viewUser/{{notification.user.pk}}" style="text-decoration: none; color: white;"><strong>{{ notification.user.username }}</strong></a>
+                    <p>{{ notification.message}}</p>
+                    {% endif %}
+                    </a>
+                </li>
+                {% empty %}
+                <p>No notifications</p>
+                {% endfor %}
+            </ul>
+        </div>
 </body>
 
 </html>

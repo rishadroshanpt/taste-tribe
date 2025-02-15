@@ -13,20 +13,19 @@
 
 <body>
     <div id="sidebar" class="sidebar">
-        <a href="../userHome">Home</a>
-        <a href="../addRecipe" class="active">Add Recipe</a>
+        <a href="../userHome"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="../addRecipe" class="active"><i class="fas fa-plus"></i><span>Add Recipe</span></a>
         <div class="notification">
-            <a href="../notifications">Notifications</a>
+            <a href="../notifications"><i class="fas fa-bell"></i><span>Notifications</span></a>
             {% if unread_count > 0 %}
             <span class="notification-badge">{{ unread_count }}</span>
             {% else %}
-            <span class="notification-badge">0</span>
             {% endif %}
         </div>
-        <a href="../profile">Profile</a>
+        <a href="../profile"><i class="fas fa-user"></i><span>Profile</span></a>
     </div>
     <div class="container-fluid main">
-        <div class="row">
+        <div class="row addRecForm">
             <div class="addRec">
                 <a href="../ingredients/{{dish.pk}}" class="btn btn-outline-dark cooking">Ingredients</a>
                 <a href="../userHome" class="btn btn-dark done">Done</a>
@@ -43,7 +42,7 @@
                 <div class="row">
                     {% if data %}
                     {% for i in data %}
-                    <div class="col-6">
+                    <div class="col-lg-6 col-md-6">
                         <div class="items">
                             <h5>{{i.steps}}</h5>
                             <div class="bb">

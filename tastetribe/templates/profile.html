@@ -23,7 +23,6 @@
             {% if unread_count > 0 %}
             <span class="notification-badge">{{ unread_count }}</span>
             {% else %}
-            <span class="notification-badge">0</span>
             {% endif %}
         </div>
         <a href="profile" class="active"><i class="fas fa-user"></i><span>Profile</span></a>
@@ -37,7 +36,7 @@
                 <h6>{{user.first_name}}</h6>
                 <h6>{{user.bio.bio}}</h6>
             </div>
-            <div class="col-5" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="col-5 col5-2" style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="det">
                     <h4>{{post}}</h4>
                     <h5>posts</h5>
@@ -51,7 +50,7 @@
                     <h5>Following</h5>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-2 userMenu">
                 <div class="dropdown" style="display: flex; justify-content: end;">
                     <button type="button" class="btn" data-bs-toggle="dropdown" style="color: white;">
                         <i class="fa-solid fa-bars"></i>
@@ -101,7 +100,7 @@
                 </div>
                 
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 dishDet3">
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
                         Ingredients :
@@ -129,6 +128,7 @@
                     </div>
                 </div>
             </div>
+            <button class="toggleBtn">See more ...</button>
         </div>
 
         {% endfor %}

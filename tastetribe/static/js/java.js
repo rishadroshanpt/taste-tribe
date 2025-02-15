@@ -51,6 +51,23 @@ window.onload = function() {
 };
 
 
+    // Attach a click event listener to each button for toggling the visibility
+    document.querySelectorAll('.toggleBtn').forEach((button, index) => {
+        button.addEventListener('click', function() {
+            // Get the corresponding dish details container
+            var dishDetails = document.querySelectorAll('.dishDet3')[index];
+            
+            // Toggle visibility
+            if (dishDetails.style.display === 'none' || !dishDetails.style.display) {
+                dishDetails.style.display = 'block'; // Show content
+                button.textContent = 'See Less';   // Change button text to "Show Less"
+            } else {
+                dishDetails.style.display = 'none'; // Hide content
+                button.textContent = 'See More ...';   // Change button text to "Show More"
+            }
+        });
+    });
+
 
 
 

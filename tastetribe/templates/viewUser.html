@@ -16,27 +16,27 @@
 
 <body>
     <div id="sidebar" class="sidebar">
-        <a href="../userHome">Home</a>
-        <a href="../addRecipe">Add Recipe</a>
+        <a href="../userHome"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="../addRecipe"><i class="fas fa-plus"></i><span>Add Recipe</span></a>
         <div class="notification">
-            <a href="notifications">Notifications</a>
+            <a href="../notifications"><i class="fas fa-bell"></i><span>Notifications</span></a>
             {% if unread_count > 0 %}
             <span class="notification-badge">{{ unread_count }}</span>
             {% else %}
             <span class="notification-badge">0</span>
             {% endif %}
         </div>
-        <a href="../profile">Profile</a>
+        <a href="../profile"><i class="fas fa-user"></i><span>Profile</span></a>
     </div>
     <div class="container-fluid main">
         <div class="row user">
             <div class="col-5">
                 <h6>{{user.username}}</h6>
-                <img class="profilePic" src="{{user.bio.img}}" alt="">
+                <img class="profilePic" src="{{user.bio.img.url}}" alt="">
                 <h6>{{user.first_name}}</h6>
                 <h6>{{user.bio.bio}}</h6>
             </div>
-            <div class="col-5" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="col-5 col5-2" style="display: flex; justify-content: space-between; align-items: center;">
                 <div class="det">
                     <h4>{{post}}</h4>
                     <h5>posts</h5>
@@ -55,9 +55,9 @@
                 <div class="col-5">
                     {% if user1 != user %}
                     {% if is_following %}
-                    <a href="../unfollow/{{user.pk}}" class="btn btn-outline-dark">Unfollow</a>
+                    <a href="../unfollow/{{user.pk}}" class="btn btn-outline-dark follow">Unfollow</a>
                     {% else %}
-                    <a href="../follow/{{user.pk}}" class="btn btn-dark">Follow</a>
+                    <a href="../follow/{{user.pk}}" class="btn btn-dark follow">Follow</a>
                     {% endif %}
                     {% endif %}
                 </div>
@@ -103,7 +103,7 @@
                     <h4> Cooking time : {{i.cook}} minutes</h4>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 dishDet3">
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
                         Ingredients :
@@ -131,6 +131,7 @@
                     </div>
                 </div>
             </div>
+            <button class="toggleBtn">See more ...</button>
         </div>
 
         {% endfor %}

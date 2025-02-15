@@ -9,7 +9,7 @@ def create_follow_notification(sender, instance, created, **kwargs):
         # Notify the user being followed
         Notification.objects.create(
             user=instance.following,
-            message=f"{instance.follower.username} started following you",
+            message="started following you",
         )
 
 @receiver(post_save, sender=Like)
@@ -18,7 +18,7 @@ def create_like_notification(sender, instance, created, **kwargs):
         # Notify the user who posted the liked post
         Notification.objects.create(
             user=instance.dish.user,
-            message=f"{instance.user.username} liked your post",
+            message="liked your post",
         )
 
 @receiver(post_save, sender=User)

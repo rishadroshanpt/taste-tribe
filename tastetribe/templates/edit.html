@@ -13,32 +13,31 @@
 
 <body>
     <div id="sidebar" class="sidebar">
-        <a href="../userHome">Home</a>
-        <a href="../addRecipe" class="active">Add Recipe</a>
+        <a href="../userHome"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="../addRecipe" class="active"><i class="fas fa-plus"></i><span>Add Recipe</span></a>
         <div class="notification">
-            <a href="../notifications">Notifications</a>
+            <a href="../notifications"><i class="fas fa-bell"></i><span>Notifications</span></a>
             {% if unread_count > 0 %}
             <span class="notification-badge">{{ unread_count }}</span>
             {% else %}
-            <span class="notification-badge">0</span>
             {% endif %}
         </div>
-        <a href="../profile">Profile</a>
+        <a href="../profile"><i class="fas fa-user"></i><span>Profile</span></a>
     </div>
     <div class="container-fluid main">
-        <div class="row">
+        <div class="row addRecForm">
             <div class="edit addRec">
                 <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="form-container">
-                        <div class="form-group">
-                            <label for="name">Name of the dish</label>
-                            <input type="text" name="name" id="name" value="{{data.name}}">
-                        </div>
-                        <img src="{{data.img.url}}" alt="" width="500px">
+                        <img src="{{data.img.url}}" alt="" width="100%">
                         <div class="form-group">
                             <label for="img">Add Photo</label>
                             <input type="file" name="img" id="img">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name of the dish</label>
+                            <input type="text" name="name" id="name" value="{{data.name}}">
                         </div>
                         <div class="form-group">
                             <label for="cuisine">Cuisine of the dish</label>
@@ -53,10 +52,12 @@
                             <input type="number" name="cook" id="cook" value="{{data.cook}}">
                         </div>
                         <div class="space">
-                            <a href="../ingredients/{{data.pk}}" class="btn btn-primary">Edit Ingredients</a>
-                            <a href="../cooking/{{data.pk}}" class="btn btn-primary">Edit Cooking steps</a>
+                            <a href="../ingredients/{{data.pk}}" class="btn btn-outline-dark">Edit Ingredients</a>
+                            <a href="../cooking/{{data.pk}}" class="btn btn-outline-dark">Edit Cooking steps</a>
                         </div>
                         <input type="submit" class="btn btn-success" value="Update">
+                        <a href="../userHome" class="btn btn-dark userDone">Done</a>
+
                     </div>
                 </form>
                 
