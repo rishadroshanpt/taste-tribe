@@ -10,6 +10,8 @@ import math,random
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import Follow, Like, Notification
+from django.http import JsonResponse
+from django.db.models import Q 
 
 
 # Create your views here.
@@ -88,7 +90,9 @@ def home(req):
 def userHome(req):
     if 'user' in req.session:
         user=User.objects.get(username=req.session['user'])
-        dish=Dish.objects.all()[: : -1]
+        following_users = Follow.objects.filter(follower=user).values_list('following', flat=True)
+        dish = Dish.objects.filter(user__in=following_users)[: : -1]
+        # dish=Dish.objects.all()[: : -1]
         ingr=Ingredients.objects.all()
         cook=Cooking.objects.all()
         like=Like.objects.all()
@@ -99,6 +103,64 @@ def userHome(req):
         return render(req,'home.html',{'dish':dish,'ingr':ingr,'cook':cook,'like':like,'liked_dishes':liked_dishes,'saved_dishes':saved_dishes,'unread_count':unread_count})
     else:
         return redirect(shop_login)
+    
+def explore(req):
+    if 'user' in req.session:
+        # query = req.GET.get('q', '') 
+        user=User.objects.get(username=req.session['user'])
+        # if query:
+        # # Search across dish name, cuisine, and user (case-insensitive search)
+        #     dish = Dish.objects.filter(
+        #         Q(name__icontains=query) |
+        #         Q(cuisine__icontains=query) |
+        #         Q(user__first_name__icontains=query)  # Searching for user's first name
+        #     )[: : -1]
+        # else:
+        dish=Dish.objects.all()[: : -1]
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        like=Like.objects.all()
+        save=Saved.objects.all()
+        liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
+        saved_dishes = [save.dish.pk for save in save if save.user.pk == user.pk]
+        unread_count = Notification.objects.filter(user=user, read=False).count()
+        return render(req,'explore.html',{'dish':dish,'ingr':ingr,'cook':cook,'like':like,'liked_dishes':liked_dishes,'saved_dishes':saved_dishes,'unread_count':unread_count})
+    else:
+        return redirect(shop_login)
+    
+
+
+def search_dishes(req):
+    query = req.GET.get('q', '')  # Get the search query from the request
+    user=User.objects.get(username=req.session['user'])
+  # Assuming you are using the logged-in user
+
+    if query:
+        # Search across dish name, cuisine, and user (case-insensitive search)
+        dishes = Dish.objects.filter(
+            Q(name__icontains=query) |
+            Q(cuisine__icontains=query) |
+            Q(user__first_name__icontains=query)  # Searching for user's first name
+        )
+    else:
+        dishes = Dish.objects.all()  # If no query, return all dishes
+
+    # Fetch liked and saved dishes for the current user
+    liked_dishes = [like.dish.pk for like in Like.objects.filter(user=user)]
+    saved_dishes = [save.dish.pk for save in Saved.objects.filter(user=user)]
+    
+    ingr = Ingredients.objects.all()
+    cook = Cooking.objects.all()
+
+    # Return the HTML fragment with the search results
+    return render(req, 'result.html', {
+        'dish': dishes,
+        'liked_dishes': liked_dishes,
+        'saved_dishes': saved_dishes,
+        'ingr': ingr,
+        'cook': cook,
+    })
+
     
 def profile(req):
     if 'user' in req.session:
@@ -270,18 +332,43 @@ def deleteCook(req,pid):
     else:
         return redirect(shop_login)
     
-def addLike(req,pid):
+def add_like(req,pid):
     if 'user' in req.session:
-        data=Dish.objects.get(pk=pid)
-        user=User.objects.get(username=req.session['user'])
-        data.likes+=1
-        data.save()
-        data=Like.objects.create(dish=Dish.objects.get(id=pid),user=user)
-        data.save()
-        return redirect(req.META.get('HTTP_REFERER'))
+        dish = Dish.objects.get(pk=pid)
+        user = User.objects.get(username=req.session['user'])
+
+        like, created = Like.objects.get_or_create(user=user, dish=dish)
+
+        if not created:
+            like.delete()
+            liked = False
+        else:
+            liked = True
+
+        dish.likes = Like.objects.filter(dish=dish).count()
+        dish.save()
+
+        return JsonResponse({
+            'liked': liked,
+            'likes_count': dish.likes,
+        })
+
     else:
         return redirect(shop_login)
     
+def addLike(req,pid):
+    if 'user' in req.session:
+        dish=Dish.objects.get(pk=pid)
+        user=User.objects.get(username=req.session['user'])
+        dish.likes+=1
+        dish.save()
+        data=Like.objects.create(dish=dish,user=user)
+        data.save()
+        # return redirect(home)
+        return redirect(req.META.get('HTTP_REFERER'))
+    else:
+        return redirect(shop_login)
+
 def removeLike(req,pid):
     if 'user' in req.session:
         data=Dish.objects.get(pk=pid)
@@ -289,7 +376,6 @@ def removeLike(req,pid):
         data.likes-=1
         data.save()
         data=Like.objects.get(dish=pid,user=user)
-        print(data)
         data.delete()
         # return redirect(home)
         return redirect(req.META.get('HTTP_REFERER'))

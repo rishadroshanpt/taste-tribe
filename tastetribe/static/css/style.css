@@ -18,7 +18,7 @@ body{
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #111;
+    background-color: #111111c1;
     /* padding-top: 60px; */
     transition: 0.3s;
     z-index: 10;
@@ -211,7 +211,15 @@ body{
     color: white;
 }
 
-
+#searchResults{
+    padding: 0;
+}
+#searchInput{
+    padding: 0;
+}
+.search{
+    margin: 0;
+}
 
 
 

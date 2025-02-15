@@ -23,6 +23,55 @@
 // };
 
 
+
+
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const likeButtons = document.querySelectorAll('.like-button');
+
+        likeButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();  // Prevent the default link behavior
+
+                const dishId = this.getAttribute('data-dish-id');  // Get the dish ID
+                const likeIcon = document.getElementById(`like-icon-${dishId}`);
+                const likeCountSpan = document.getElementById(`like-count-${dishId}`);
+
+                fetch(`/add_like/${dishId}/`, {
+                    method: 'GET',  // Use 'POST' for adding/removing likes
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,  // Include CSRF token
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.liked) {
+                        likeIcon.classList.remove('fa-regular', 'fa-heart');
+                        likeIcon.classList.add('fa-solid', 'fa-heart', 'redheart');
+                    } else {
+                        likeIcon.classList.remove('fa-solid', 'fa-heart', 'redheart');
+                        likeIcon.classList.add('fa-regular', 'fa-heart');
+                    }
+                    likeCountSpan.textContent = data.likes_count;  // Update the like count
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
 window.onload = function() {
     // Check if a scroll position is saved in localStorage and directly scroll to it
     if (localStorage.getItem('scrollPosition')) {
@@ -75,7 +124,25 @@ window.onload = function() {
 
 
 
+    let timeout;
 
+    document.getElementById('searchInput').addEventListener('input', function() {
+        clearTimeout(timeout);
+    
+        const query = this.value;  // Get the value from the search input field
+    
+        timeout = setTimeout(() => {
+            fetch(`/search_dishes/?q=${query}`)
+                .then(response => response.text())  // Expecting HTML as response
+                .then(html => {
+                    const resultsList = document.getElementById('searchResults');  // The container where results will be rendered
+                    resultsList.innerHTML = html;  // Replace previous results with the new HTML
+                })
+                .catch(error => console.error('Error fetching search results:', error));
+        }, 300);  // Wait for 300ms after the last input before sending the request
+    });
+    
+    
 
 
 
