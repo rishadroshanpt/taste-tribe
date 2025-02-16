@@ -83,3 +83,55 @@ window.onload = function() {
 
 
 
+
+
+
+
+
+
+
+    // Get all buttons with class 'toggle-button'
+    document.addEventListener("DOMContentLoaded", function() {
+        // Get all buttons with class 'toggle-button'
+        const buttons = document.querySelectorAll('.toggle-button');
+        
+        // Function to check screen size and toggle content visibility
+        function toggleVisibility() {
+            // Only execute the toggle behavior if screen size is less than 500px
+            if (window.innerWidth < 500) {
+                buttons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Get the target section (either "dishes" or "users")
+                        const target = this.getAttribute('data-target');
+                        
+                        // Hide both sections
+                        document.getElementById('dishes').style.display = 'none';
+                        document.getElementById('users').style.display = 'none';
+                        
+                        // Show the clicked target section
+                        document.getElementById(target).style.display = 'block';
+                    });
+                });
+            } else {
+                // If the screen width is greater than or equal to 500px, make sure both sections are visible
+                document.getElementById('dishes').style.display = 'block';
+                document.getElementById('users').style.display = 'block';
+                // Remove event listeners to avoid unnecessary toggling
+                buttons.forEach(button => {
+                    button.removeEventListener('click', toggleVisibility);
+                });
+            }
+        }
+    
+        // Check on page load
+        toggleVisibility();
+        
+        // Check whenever the window is resized
+        window.addEventListener('resize', toggleVisibility);
+    });
+    
+
+
+
+
+

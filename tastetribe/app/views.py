@@ -138,7 +138,7 @@ def search_dishes(req):
         # Search across dish name, cuisine, and user (case-insensitive search)
         dishes = Dish.objects.filter(Q(name__icontains=query) | Q(cuisine__icontains=query))
         users = User.objects.filter(Q(first_name__icontains=query))
-    return render(req, 'result.html', {
+    return render(req, 'partials/result.html', {
         'dish': dishes,
         'users': users,
     })

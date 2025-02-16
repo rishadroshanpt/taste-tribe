@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -17,11 +17,13 @@
 
 <body>
     {% csrf_token %}
-    <div class="container-fluid">
+    <div class="container-fluid"> -->
         <ul id="searchResults">
             <div class="searchRes">
+                <button class="toggle-button" data-target="dishes">Dishes</button>
+                <button class="toggle-button" data-target="users">Users</button>
                 <div class="row">
-                    <div class="col-6 dishes">
+                    <div class="col-6 dishes" id="dishes">
                         <h2>Dishes</h2>
                         {% if dish %}
                         {% for i in dish %}
@@ -40,7 +42,7 @@
                         {% endif %}
                     </div>
 
-                    <div class="col-6 users">
+                    <div class="col-6 users" id="users">
                         <h2>Users</h2>
                         {% if users %}
                         {% for i in users %}
@@ -62,11 +64,10 @@
             </div>
 
         </ul>
-    </div>
+    <!-- </div>
 
 
-    <script src="{% static 'js/java.js' %}"></script>
-
+<script src="{% static 'js/java.js' %}"></script>
 </body>
 
-</html>
+</html> -->

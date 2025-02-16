@@ -237,11 +237,12 @@ body{
     display: flex;
     justify-content: space-between;
     gap: 20px;
+    margin: 10px;
 }
 
 /* Individual Column Styling */
 .searchRes .col-6 {
-    width: 48%;
+    width: 35vw;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -322,6 +323,9 @@ body{
 }
 .searchRes a{
     text-decoration: none;
+}
+.toggle-button{
+    display: none;
 }
 
 
@@ -479,6 +483,9 @@ body{
         padding-left: 4vw;
         font-size: 2vw;
     }
+    .searchRes .col-6 {
+        width: 40vw;
+    }
 }
 
 
@@ -507,84 +514,166 @@ body{
     position: relative;
     left: 30vw;
 }
+/* .searchRes .col-6 {
+    width: 90vw;
+    height: 100vh;
+    display: none;
+} */
+.toggle-button{
+    display: block;
+    padding: 10px 20px;
+margin: 10px;
+background-color: #FF4B2B;
+color: white;
+border: none;
+cursor: pointer;
+font-size: 16px;
+border-radius: 5px;
+}
 }
 
 
 @media screen and (max-width: 490px) {
-.sidebar{
-    height: 40px;
-}
-.sidebar a{
-    padding: 5px;
-}
-.sidebar a i{
-    display: inline-block;
-    font-size: 15px;
-}
-.main{
-    margin-bottom: 40px;
-}
-.addRec input[type="text"],
-.addRec input[type="file"],
-.addRec input[type="number"],
-.addRec input[type="submit"] {
-    padding: 4px;
-}
-.post{
-    padding: 0;
-}
-.dish{
-    display: block;
-}
-.dishDet a{
-    font-size: 3vw;
-}
-.dishDet h4, .dishDet h5{
-    font-size: 4vw;
-}
-.dishDet3{
-    margin-top: 0;
-}
-.col-md-6, .col-md-6 h6{
-    font-size: 3vw;
-}
-.toggleBtn{
-    padding-left: 3vw;
-    font-size: 3vw;
-}
-.notifications ul li{
-    padding: 10px;
-}
-.notifications {
-    font-size: 2.5vw;
-}
-.user .col-5{
-    padding: 10px 10px;
-}
-.user a{
-    font-size: 2vw;
-}
-.rating h4{
-    font-size: 4vw;
-}
-.rate p, .rate h5{
-    font-size: 3vw;
-}
-.edit .space .btn{
-    width: 30vw;
-    font-size: 3vw;
-}
-.cooking{
-    width: 20vw;
-    font-size: 2vw;
-}
-.bb .btn ,.done{
-    width: 10vw;
-    font-size: 2vw;
-}
-.addRec .items h5{
-    font-size: 4vw;
-}
+    .sidebar{
+        height: 40px;
+    }
+    .sidebar a{
+        padding: 5px;
+    }
+    .sidebar a i{
+        display: inline-block;
+        font-size: 15px;
+    }
+    .main{
+        margin-bottom: 40px;
+    }
+    .addRec input[type="text"],
+    .addRec input[type="file"],
+    .addRec input[type="number"],
+    .addRec input[type="submit"] {
+        padding: 4px;
+    }
+    .post{
+        padding: 0;
+    }
+    .dish{
+        display: block;
+    }
+    .dishDet a{
+        font-size: 3vw;
+    }
+    .dishDet h4, .dishDet h5{
+        font-size: 4vw;
+    }
+    .dishDet3{
+        margin-top: 0;
+    }
+    .col-md-6, .col-md-6 h6{
+        font-size: 3vw;
+    }
+    .toggleBtn{
+        padding-left: 3vw;
+        font-size: 3vw;
+    }
+    .notifications ul li{
+        padding: 10px;
+    }
+    .notifications {
+        font-size: 2.5vw;
+    }
+    .user .col-5{
+        padding: 10px 10px;
+    }
+    .user a{
+        font-size: 2vw;
+    }
+    .rating h4{
+        font-size: 4vw;
+    }
+    .rate p, .rate h5{
+        font-size: 3vw;
+    }
+    .edit .space .btn{
+        width: 30vw;
+        font-size: 3vw;
+    }
+    .cooking{
+        width: 20vw;
+        font-size: 2vw;
+    }
+    .bb .btn ,.done{
+        width: 10vw;
+        font-size: 2vw;
+    }
+    .addRec .items h5{
+        font-size: 4vw;
+    }
+    #searchInput{
+        font-size: 3vw;
+        width: 90vw;
+        border-radius: .5vw;
+        padding: 0 5vw;
+        margin: 1vw 5vw;
+    }
+    /* Row Layout */
+    .searchRes .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin: 10px;
+    }
+
+    /* Individual Column Styling */
+    .searchRes .col-6 {
+        width: 90vw;
+        height: 100vh;
+        display: none;
+    }
+
+    /* Title Styling */
+    .searchRes h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+
+    .searchRes .dish-item img.profilePic {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .searchRes .dish-info h4 {
+        font-size: 12px;
+    }
+
+    .searchRes .dish-info h6 {
+        font-size: 10px;
+    }
+
+    /* User Item Styling */
+
+
+    .searchRes .user-item img.profilePic {
+        width: 30px;
+        height: 30px;
+    }
+
+    .searchRes .user-info h4 {
+        font-size: 12px;
+    }
+
+    .searchRes .user-info .cuisine {
+        font-size: 10px;
+    }
+
+    /* If No Results Found */
+    .searchRes h3 {
+        font-size: 12px;
+
+    }
+
 }
 
 
