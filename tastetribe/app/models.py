@@ -37,7 +37,7 @@ class Cooking(models.Model):
 
 class Bio(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
-    img = models.FileField(upload_to='profile_pics/', default='profile_pics/default.png')
+    img = models.FileField(upload_to='profile_pics/', default='profile_pics/profile.jpg')
     bio=models.TextField(default="Hi,I'm here")
 
 class Follow(models.Model):

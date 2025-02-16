@@ -35,13 +35,17 @@ def shop_login(req):
             email = req.POST['email']
             password = req.POST['passwd']
             otp=OTP(req)
+            req.session['name'] = name
+            req.session['email'] = email
+            req.session['password'] = password
+            req.session['otp'] = otp
             if User.objects.filter(email=email).exists():
                 messages.error(req, "Email is already in use.")
                 return redirect(shop_login)
             else:
                 send_mail('Your registration OTP ,',f"OTP for registration is {otp}", settings.EMAIL_HOST_USER, [email])
                 messages.success(req, "Registration successful. Please check your email for OTP.")
-                return redirect("validate",name=name,password=password,email=email,otp=otp)    
+                return redirect("validate")    
         else:
             return redirect(shop_login)
     else:
@@ -59,25 +63,14 @@ def OTP(req):
         OTP += digits[math.floor(random.random() * 10)]
     return OTP
 
-def register(req):
-    if req.method=='POST':
-        name=req.POST['name']
-        email=req.POST['email']
-        password=req.POST['password']
-        otp=OTP(req)
-        if User.objects.filter(email=email).exists():
-            messages.error(req, "Email is already in use.")
-            return redirect(register)
-        else:
-            send_mail('Your registration OTP ,',f"OTP for registration is {otp}", settings.EMAIL_HOST_USER, [email])
-            messages.success(req, "Registration successful. Please check your email for OTP.")
-            return redirect("validate",name=name,password=password,email=email,otp=otp)
-    else:
-        return render(req,'register.html')
 
-def validate(req,name,password,email,otp):
+def validate(req):
     if req.method=='POST':
         uotp=req.POST['uotp']
+        name = req.session.get('name')
+        email = req.session.get('email')
+        password = req.session.get('password')
+        otp = req.session.get('otp')
         if uotp==otp:
             data=User.objects.create_user(first_name=name,email=email,password=password,username=email)
             data.save()
@@ -85,9 +78,9 @@ def validate(req,name,password,email,otp):
             return redirect(shop_login)
         else:
             messages.error(req, "Invalid OTP. Please try again.")
-            return redirect("validate",name=name,password=password,email=email,otp=otp)
+            return redirect("validate")
     else:
-        return render(req,'validate.html',{'name':name,'pass':password,'email':email,'otp':otp})
+        return render(req,'validate.html')
 
 
 
@@ -106,7 +99,7 @@ def userHome(req):
     if 'user' in req.session:
         user=User.objects.get(username=req.session['user'])
         following_users = Follow.objects.filter(follower=user).values_list('following', flat=True)
-        dish = Dish.objects.filter(user__in=following_users)[: : -1]
+        dish = Dish.objects.filter(user__in=following_users).union(Dish.objects.filter(user=user))[: : -1]
         # dish=Dish.objects.all()[: : -1]
         ingr=Ingredients.objects.all()
         cook=Cooking.objects.all()
@@ -467,13 +460,15 @@ def editProfile(req):
             name=req.POST['name']
             if img:
                 User.objects.filter(pk=user.pk).update(first_name=name)
-                Bio.objects.filter(user=user).update(bio=bio,img=img)
-                # data=Bio.objects.get(user=user)
-                # url=data.img.url
-                # og_path=url.split('/')[-1]
-                # os.remove('media/profile_pics/'+og_path)
-                # data.img=img
-                # data.save()
+                Bio.objects.filter(user=user).update(bio=bio)
+                data=Bio.objects.get(user=user)
+                url=data.img.url
+                og_path=url.split('/')[-1]
+                print(og_path)
+                if og_path != 'profile.jpg':
+                    os.remove('media/profile_pics/'+og_path)
+                data.img=img
+                data.save()
             else:
                 User.objects.filter(pk=user.pk).update(first_name=name)
                 Bio.objects.filter(user=user).update(bio=bio)

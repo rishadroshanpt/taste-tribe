@@ -470,21 +470,21 @@ body{
         width: 7vw;
         font-size: 1.5vw;
     }
-
+    .dishDet3{
+        display: none;
+    }
+    .toggleBtn{
+        display: block;
+        all: unset;
+        padding-left: 4vw;
+        font-size: 2vw;
+    }
 }
 
 
 
 @media screen and (max-width: 790px) {
-.dishDet3{
-    display: none;
-}
-.toggleBtn{
-    display: block;
-    all: unset;
-    padding-left: 4vw;
-    font-size: 2vw;
-}
+
 .post{
     padding: 0;
 }

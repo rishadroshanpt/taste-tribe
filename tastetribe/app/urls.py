@@ -3,8 +3,8 @@ from . import views
 
 urlpatterns=[
     path('shop_login',views.shop_login,name='shop_login'),
-    path('register',views.register),
-    path('validate/<name>/<password>/<email>/<otp>',views.validate,name="validate"),
+    # path('register',views.register),
+    path('validate',views.validate,name="validate"),
     path('logout',views.shp_logout),
     path('',views.home),
     path('userHome',views.userHome),

@@ -11,12 +11,20 @@
     <link rel="stylesheet" href="{% static 'css/login.css' %}">
 </head>
 <body>
-    <form action="" method="post">
+    <!-- <form action="" method="post">
         {% csrf_token %}
-        <!-- <img src="{% static 'images/pawfectlogohead.jpg'%}" alt="" class=""> -->
         <input type="number" name="uotp" id="" placeholder="OTP"><br>
         <input type="submit" class="btn" value="VERIFY">
-    </form>
+    </form> -->
+    <div class="container" id="container">
+            <form action="" method="post">
+                {% csrf_token %}
+                <h1 class="spacing">Verify Email</h1>
+                <input type="number" name="uotp" placeholder="OTP" style="width: 50%;" class="spacing">
+                <button type="submit" class="spacing">Verify</button>
+            </form>
+        </div>
+    </div>    
     {% if messages %}
     {% for message in messages %}
     <div class="alert alert-warning alert-dismissible">

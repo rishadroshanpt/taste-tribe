@@ -49,6 +49,7 @@ button {
 	letter-spacing: 1px;
 	text-transform: uppercase;
 	transition: transform 80ms ease-in;
+	margin-top: 3vh;
 }
 
 button:active {
@@ -90,7 +91,7 @@ input {
 			0 10px 10px rgba(0,0,0,0.22);
 	position: relative;
 	overflow: hidden;
-	width: 768px;
+	width: 50vw;
 	max-width: 100%;
 	min-height: 480px;
 }
@@ -220,27 +221,15 @@ input {
 	width: 40px;
 }
 
-footer {
-    background-color: #222;
-    color: #fff;
-    font-size: 14px;
-    bottom: 0;
-    position: fixed;
-    left: 0;
-    right: 0;
-    text-align: center;
-    z-index: 999;
+.spacing{
+	margin-bottom: 3vh;
 }
-
-footer p {
-    margin: 10px 0;
+.alert{
+	width: 40vw;
+	max-width: 100%;
+	margin-top: 3vh;
+	padding: 10px;
 }
-
-footer i {
-    color: red;
-}
-
-footer a {
-    color: #3c97bf;
-    text-decoration: none;
+.btn-close{
+	margin: 0;
 }
