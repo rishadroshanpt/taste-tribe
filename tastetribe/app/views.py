@@ -16,16 +16,22 @@ from django.db.models import Q
 
 # Create your views here.
 def shop_login(req):
+    if 'admin' in req.session:
+        return redirect(adminHome)
     if 'user' in req.session:
-        return redirect(home)
+        return redirect(userHome)
     if req.method == 'POST':
         if 'uname' in req.POST and 'passwd' in req.POST:
             uname = req.POST['uname']
             password = req.POST['passwd']
             data = authenticate(username=uname, password=password)
-            if data:
-                req.session['user']=uname   #create session
-                return redirect(userHome)
+            if data :
+                if data.is_superuser:
+                    req.session['admin']=uname   #create session
+                    return redirect(adminHome)
+                else:
+                    req.session['user']=uname   #create session
+                    return redirect(userHome)
             else:
                 messages.warning(req,'Invalid username or password.')
                 return redirect(shop_login)
@@ -84,6 +90,71 @@ def validate(req):
 
 
 
+
+# -----------------admin-----------------------------
+
+def adminHome(req):
+    if 'admin' in req.session:
+        user=User.objects.get(username=req.session['admin'])
+        dish=Dish.objects.all()[: : -1]
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        like=Like.objects.all()
+        save=Saved.objects.all()
+        liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
+        saved_dishes = [save.dish.pk for save in save if save.user.pk == user.pk]
+        unread_count = Notification.objects.filter(user=user, read=False).count()
+        return render(req,'admin/home.html',{'dish':dish,'ingr':ingr,'cook':cook,'like':like,'liked_dishes':liked_dishes,'saved_dishes':saved_dishes,'unread_count':unread_count})
+    else:
+        return redirect(shop_login)
+    
+def adminDish(req,pid):
+    if 'admin' in req.session:
+        # user=User.objects.get(username=req.session['admin'])
+        dish=Dish.objects.get(pk=pid)
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        like=Like.objects.all()
+        save=Saved.objects.all()
+        # liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
+        # saved_dishes = [save.dish.pk for save in save if save.user.pk == user.pk]
+        return render(req,'admin/dish.html',{'dish':dish,'ingr':ingr,'cook':cook,'like':like})
+    else:
+        return redirect(shop_login)
+
+def reports(req):
+    if 'admin' in req.session:
+        # user=User.objects.get(username=req.session['admin'])
+        data=Report.objects.all()[: : -1]
+        return render(req,'admin/reports.html',{'data':data})
+    else:
+        return redirect(shop_login)
+
+    
+def viewUserAdmin(req,pid):
+    if 'admin' in req.session:
+        user1=User.objects.get(username=req.session['admin'])
+        user=User.objects.get(pk=pid)
+        dish=Dish.objects.filter(user=user)
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        like=Like.objects.all()
+        save=Saved.objects.all()
+        liked_dishes = [like.dish.pk for like in like if like.user.pk == user1.pk]
+        saved_dishes = [save.dish.pk for save in save if save.user.pk == user1.pk]
+        post=dish.count()
+        followers = (user.followers.all()).count()
+        following = (user.following.all()).count()
+        unread_count = Notification.objects.filter(user=user1, read=False).count()
+        is_following =  Follow.objects.filter(follower=user1, following=user).exists()
+        return render(req,'admin/viewUser.html',{'dish':dish,'ingr':ingr,'cook':cook,'liked_dishes':liked_dishes,'is_following':is_following,'user':user,'user1':user1,'post':post,'followers':followers,'following':following,'saved_dishes':saved_dishes,'unread_count':unread_count})
+    else:
+        return redirect(shop_login)
+
+
+
+
+# -------------------user----------------------------
 
 def home(req):
     if 'user' in req.session:
@@ -347,8 +418,8 @@ def like(req,pid):
     
 def addLike(req,pid):
     if 'user' in req.session:
-        dish=Dish.objects.get(pk=pid)
         user=User.objects.get(username=req.session['user'])
+        dish=Dish.objects.get(pk=pid)
         dish.likes+=1
         dish.save()
         data=Like.objects.create(dish=dish,user=user)
@@ -371,6 +442,15 @@ def removeLike(req,pid):
     else:
         return redirect(shop_login)
     
+def report(req,pid):
+    if 'user' in req.session:
+        dish=Dish.objects.get(pk=pid)
+        user=User.objects.get(username=req.session['user'])
+        data=Report.objects.create(dish=dish,user=user)
+        data.save()
+        return redirect(req.META.get('HTTP_REFERER'))
+    else:
+        return redirect(shop_login)
 
 def feedbacks(req,pid):
     if 'user' in req.session:

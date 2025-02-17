@@ -59,3 +59,7 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Notification for {self.user.username}"
+    
+class Report(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    dish=models.ForeignKey(Dish, on_delete=models.CASCADE)

@@ -340,7 +340,24 @@ body{
     width: 70px;
     padding: 5px 10px;
 }
-
+.reportItem{
+    /* background-color: #555; */
+    border-radius: 10px;
+    display: flex;
+    margin: 10px;
+    padding: 10px;
+    align-items: center;
+}
+.reportItem div{
+    flex: 1;
+}
+.reportImg{
+    width: 300px;
+}
+a{
+    text-decoration: none;
+    color: white;
+}
 
 
 
