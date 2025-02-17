@@ -218,6 +218,15 @@ input {
 .btn-close{
 	margin: 0;
 }
+#registerForm ul{
+	display: flex;
+	justify-content: left;
+	flex-direction: column;
+	padding: 0;
+	font-size: 12px;
+    list-style-type: none;
+	text-align: start;
+}
 
 
 
@@ -260,7 +269,8 @@ input {
 	}
 	
 	input {
-		padding: 8px 10px;
+		padding: 5px 10px;
+		margin: 5px;
 	}
 	
 	.container {
@@ -275,11 +285,16 @@ input {
 	}
 	
 	.container.right-panel-active .sign-in-container {
-		transform: translateY(40%);
+		transform: translateX(100%);
+		/* transform: translateX(-50%); */
 	}
 	
 	.sign-up-container {
 		width: 100%;
+	}
+	
+	.container.right-panel-active .sign-up-container {
+		transform: translateY(40%);
 	}
 	
 	/* .overlay{
@@ -302,7 +317,7 @@ input {
 	
 	
 	.container.right-panel-active .overlay {
-		  transform: translateY(0%);
+		  transform: translateY(0);
 	}
 	
 	.overlay-panel {
@@ -324,5 +339,8 @@ input {
 	
 	.container.right-panel-active .overlay-right {
 		transform: translateX(100%);
+	}
+	button{
+		margin-top: 5px;
 	}
 }

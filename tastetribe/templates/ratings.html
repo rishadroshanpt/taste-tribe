@@ -17,6 +17,7 @@
 <body>
     <div id="sidebar" class="sidebar">
         <a href="../userHome"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="../explore"><i class="fa-solid fa-magnifying-glass"></i><span>Explore</span></a>
         <a href="../addRecipe"><i class="fas fa-plus"></i><span>Add Recipe</span></a>
         <div class="notification">
             <a href="../notifications"><i class="fas fa-bell"></i><span>Notifications</span></a>
@@ -83,7 +84,7 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-6">
-                <form action="" method="post">
+                <form action="" method="post" id="feedbackForm">
                     {% csrf_token %}
                     <label for="">GIve your feedback</label><br>
                     <input type="text" name="rating" id="" placeholder="feedback"> <br>

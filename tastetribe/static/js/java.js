@@ -92,8 +92,12 @@ window.onload = function() {
 
     // Get all buttons with class 'toggle-button'
     document.addEventListener("DOMContentLoaded", function() {
+        console.log('ggg');
+        
+
         // Get all buttons with class 'toggle-button'
         const buttons = document.querySelectorAll('.toggle-button');
+        
         
         // Function to check screen size and toggle content visibility
         function toggleVisibility() {

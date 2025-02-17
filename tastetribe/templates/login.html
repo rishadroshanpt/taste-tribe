@@ -16,12 +16,19 @@
 
     <div class="container" id="container">
         <div class="form-container sign-up-container">
-            <form action="{% url 'shop_login' %}" method="post" id="signUpForm">
+            <form action="{% url 'shop_login' %}" method="post" id="registerForm">
                 {% csrf_token %}
                 <h1>Create Account</h1>
                 <input type="text" name="name" placeholder="Name" />
                 <input type="email" name="email" placeholder="Email" />
-                <input type="password" name="passwd" placeholder="Password" />
+                <input type="password" name="passwd" placeholder="Password" id="pass" />
+                <ul class="req">
+                    <li id="len">Min 8 letters</li>
+                    <li id="cap">Min 1 cap letter</li>
+                    <li id="sml">Min 1 small letter</li>
+                    <li id="dig">Min 1 digit letter</li>
+                    <li id="char">Min 1 special char letter</li>
+                </ul>
                 <button type="submit">Sign Up</button>
             </form>
         </div>

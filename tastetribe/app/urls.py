@@ -24,7 +24,7 @@ urlpatterns=[
     path('addLike/<pid>',views.addLike,name='addLike'),
     path('removeLike/<pid>',views.removeLike),
     path('viewUser/<pid>',views.viewUser,name='viewUser'),
-    path('feedbacks/<pid>',views.feedbacks,name='rating'),
+    path('feedbacks/<pid>',views.feedbacks,name='feedbacks'),
     path('follow/<uid>', views.follow_user, name='follow_user'),
     path('unfollow/<uid>', views.unfollow_user, name='unfollow_user'),
     path('save/<pid>',views.save),

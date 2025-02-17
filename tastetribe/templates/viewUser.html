@@ -17,13 +17,13 @@
 <body>
     <div id="sidebar" class="sidebar">
         <a href="../userHome"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="../explore"><i class="fa-solid fa-magnifying-glass"></i><span>Explore</span></a>
         <a href="../addRecipe"><i class="fas fa-plus"></i><span>Add Recipe</span></a>
         <div class="notification">
             <a href="../notifications"><i class="fas fa-bell"></i><span>Notifications</span></a>
             {% if unread_count > 0 %}
             <span class="notification-badge">{{ unread_count }}</span>
             {% else %}
-            <span class="notification-badge">0</span>
             {% endif %}
         </div>
         <a href="../profile"><i class="fas fa-user"></i><span>Profile</span></a>
