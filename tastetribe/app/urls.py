@@ -13,6 +13,7 @@ urlpatterns=[
     path('reports',views.reports),
     path('viewUserAdmin/<pid>',views.viewUserAdmin,name='viewUserAdmin'),
     path('adminDish/<pid>',views.adminDish,name='adminDish'),
+    path('removeReport/<pid>',views.removeReport),
 
 
 
@@ -22,7 +23,9 @@ urlpatterns=[
     path('userHome',views.userHome),
     path('explore',views.explore),
     path('search_dishes/', views.search_dishes, name='search_dishes'),
+    path('result', views.result),
     path('profile',views.profile),
+    path('dish/<pid>',views.dish),
     path('addRecipe',views.addRecipe),
     path('delete/<pid>',views.delete),
     path('ingredients/<pid>',views.ingredients,name='ingredients'),

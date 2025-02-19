@@ -118,7 +118,7 @@ def adminDish(req,pid):
         save=Saved.objects.all()
         # liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
         # saved_dishes = [save.dish.pk for save in save if save.user.pk == user.pk]
-        return render(req,'admin/dish.html',{'dish':dish,'ingr':ingr,'cook':cook,'like':like})
+        return render(req,'admin/dish.html',{'data':dish,'ingr':ingr,'cook':cook,'like':like})
     else:
         return redirect(shop_login)
 
@@ -151,7 +151,11 @@ def viewUserAdmin(req,pid):
     else:
         return redirect(shop_login)
 
-
+def removeReport(req,pid):
+    data=Report.objects.get(dish=pid)
+    # print(data)
+    data.delete()
+    return redirect(reports)
 
 
 # -------------------user----------------------------
@@ -198,7 +202,8 @@ def explore(req):
     else:
         return redirect(shop_login)
     
-
+def result(req):
+    return render(req,'result.html')
 
 def search_dishes(req):
     query = req.GET.get('q', '')  # Get the search query from the request
@@ -209,9 +214,27 @@ def search_dishes(req):
         # Search across dish name, cuisine, and user (case-insensitive search)
         dishes = Dish.objects.filter(Q(name__icontains=query) | Q(cuisine__icontains=query))
         users = User.objects.filter(Q(first_name__icontains=query))
-    return render(req, 'partials/result.html', {
-        'dish': dishes,
-        'users': users,
+    dishes_data = []
+    for dish in dishes:
+        dishes_data.append({
+            'id': dish.id,
+            'name': dish.name,
+            'cuisine': dish.cuisine,
+            'img_url': dish.img.url if dish.img else '',
+        })
+
+    users_data = []
+    for user in users:
+        users_data.append({
+            'id': user.id,
+            'first_name': user.first_name,
+            'profile_img': user.bio.img.url if user.bio and user.bio.img else '',  # Adjust based on your model
+        })
+    print(dishes_data)
+    # Return the data as JSON
+    return JsonResponse({
+        'dishes': dishes_data,
+        'users': users_data,
     })
 
 
@@ -260,6 +283,21 @@ def viewUser(req,pid):
     else:
         return redirect(shop_login)
     
+def dish(req,pid):
+    if 'user' in req.session:
+        user=User.objects.get(username=req.session['user'])
+        dish=Dish.objects.get(pk=pid)
+        ingr=Ingredients.objects.all()
+        cook=Cooking.objects.all()
+        like=Like.objects.all()
+        save=Saved.objects.all()
+        liked_dishes = [like.dish.pk for like in like if like.user.pk == user.pk]
+        saved_dishes = [save.dish.pk for save in save if save.user.pk == user.pk]
+        unread_count = Notification.objects.filter(user=user, read=False).count()
+        return render(req,'dish.html',{'data':dish,'ingr':ingr,'cook':cook,'like':like,'liked_dishes':liked_dishes,'saved_dishes':saved_dishes,'unread_count':unread_count})
+    else:
+        return redirect(shop_login)
+    
 def addRecipe(req):
     if 'user' in req.session:
         if req.method=='POST':
@@ -284,6 +322,10 @@ def delete(req,pid):
         data=Dish.objects.get(pk=pid)
         data.delete()
         return redirect(profile)
+    if 'admin' in req.session:
+        data=Dish.objects.get(pk=pid)
+        data.delete()
+        return redirect(reports)
     else:
         return redirect(shop_login)
     
